@@ -76,4 +76,18 @@ public class Computer {
 	public Date getDateDiscontinued() {
 		return this.dateDiscontinued;
 	}
+	
+	////////TO STRING////////
+	
+	public String toString() {
+		String ret = "";
+		
+		ret += " -Computer-\n";
+		ret += "id : " + this.getId() + "\n";
+		ret += "name : " + this.getName() + "\n";
+		ret += "company id : " + this.getManufacturerId() + "\n";
+		ret += "_____________\n";
+		
+		return ret;
+	}
 }

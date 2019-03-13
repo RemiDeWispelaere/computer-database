@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class DAOFactory {
 
-    private static final String FICHIER_PROPERTIES       = "/src/dao/dao.properties";
+    private static final String FICHIER_PROPERTIES       = "/home/excilys/Public/training-java/computer-database/src/dao/dao.properties";
     private static final String PROPERTY_URL             = "url";
     private static final String PROPERTY_DRIVER          = "driver";
     private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
@@ -37,7 +37,7 @@ public class DAOFactory {
         String nomUtilisateur;
         String motDePasse;
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        /*ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
 
         if ( fichierProperties == null ) {
@@ -46,14 +46,19 @@ public class DAOFactory {
 
         try {
             properties.load( fichierProperties );
-            url = properties.getProperty( PROPERTY_URL );
-            driver = properties.getProperty( PROPERTY_DRIVER );
-            nomUtilisateur = properties.getProperty( PROPERTY_NOM_UTILISATEUR );
-            motDePasse = properties.getProperty( PROPERTY_MOT_DE_PASSE );
+            url = "jdbc:mysql://localhost:3306/computer-database-db";
+            driver = "com.myssql.jdbc.Driver";
+            nomUtilisateur = "admincdb";
+            motDePasse = "qwerty1234";
         } catch ( IOException e ) {
             throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
-        }
+        }*/
 
+        url = "jdbc:mysql://localhost:3306/computer-database-db";
+        driver = "com.mysql.jdbc.Driver";
+        nomUtilisateur = "admincdb";
+        motDePasse = "qwerty1234";
+        
         try {
             Class.forName( driver );
         } catch ( ClassNotFoundException e ) {
@@ -68,12 +73,12 @@ public class DAOFactory {
      /* package */ Connection getConnection() throws SQLException {
         return DriverManager.getConnection( url, username, password );
     }
-
-    /*
-     * Méthodes de récupération de l'implémentation des différents DAO (un seul
-     * pour le moment)
-     */
+     
     public ComputerDao getComputerDao() {
         return new ComputerDaoImpl( this );
+    }
+    
+    public CompanyDao getCompanyDao() {
+    	return new CompanyDaoImpl(this);
     }
 }
