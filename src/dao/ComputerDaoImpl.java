@@ -14,7 +14,8 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	private static final String SQL_FIND_ALL = "SELECT * FROM computer";
 	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM computer LIMIT ?";
-	private static final String SQL_FIND_BY_NAME = "SELECT id, name, company_id FROM computer WHERE name = ?";
+	private static final String SQL_FIND_BY_NAME = "SELECT * FROM computer WHERE name = ?";
+	private static final String SQL_FIND_BY_ID = "SELECT * FROM computer WHERE id = ?";
 	private static final String SQL_INSERT = "INSERT INTO computer (name, company_id, introduced, discontinued) VALUES (?, ?, ?, ?))";
 	private DAOFactory daoFactory;
 	
@@ -101,6 +102,30 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 		
 		return computers;
+	}
+	
+	@Override
+	public Computer findById(int id) throws DAOException {
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Computer computer = null;
+		
+		try {
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion,SQL_FIND_BY_ID, false, id);
+			resultSet = preparedStatement.executeQuery();
+			
+			if(resultSet.next()) {
+				computer = map(resultSet);
+			}
+		}catch(SQLException e){
+			throw new DAOException(e);
+		}finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);;
+		}
+		
+		return computer;
 	}
 	
 	@Override

@@ -80,7 +80,7 @@ public class Computer {
 	////////TO STRING////////
 	
 	public String toString() {
-		String ret = " -Computer-\n" 
+		String ret = "\n -Computer-\n" 
 				+ "id : " + this.getId() + "\n"
 				+ "name : " + this.getName() + "\n"
 				+ "company id : " + this.getManufacturerId() + "\n"

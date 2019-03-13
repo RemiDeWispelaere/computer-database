@@ -39,7 +39,7 @@ public class Company {
 	////////TO STRING////////
 
 	public String toString() {
-		String ret = " -Company-\n"
+		String ret = "\n -Company-\n"
 				+ "id : " + this.getId() + "\n"
 				+ "name : " + this.getName() + "\n"
 				+ "_____________\n";

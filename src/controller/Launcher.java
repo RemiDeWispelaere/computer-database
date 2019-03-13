@@ -84,6 +84,26 @@ public class Launcher {
 				}
 				break;
 			case 3:
+				printComputerQueryMenu();
+				int choice2 = askChoice(2);
+				switch(choice2) {
+				case 1:
+					System.out.print("ENTER THE ID : ");
+					try {
+						int id = Integer.valueOf(scanner.nextLine());
+						System.out.println(computerDao.findById(id));
+					}catch(Exception e) {
+						System.out.println("INVALID ID (integer only)");
+					}
+					break;
+				case 2:
+					System.out.print("ENTER THE NAME : ");
+					String name = scanner.nextLine();
+					System.out.println(computerDao.findByName(name));
+					break;
+				default:
+						//
+				}
 				break;
 			case 4:
 				break;
@@ -93,6 +113,11 @@ public class Launcher {
 				break;
 			default:
 				//	
+			}
+			
+			if(choice != 0) {
+				System.out.println("\n[BACK TO THE MAIN MENU]");
+				scanner.nextLine();
 			}
 		}while(choice != 0);
 		
@@ -110,6 +135,14 @@ public class Launcher {
 				+ "[4] Create a new computer\n"
 				+ "[5] Update a computers\n"
 				+ "[6] Delete a computers\n\n"
+				+ "[0] EXIT\n"
+				+ "_______________________\n\n");
+	}
+	
+	public static void printComputerQueryMenu() {
+		System.out.println("_____COMPUTER DETAILS MENU_____\n\n"
+				+ "[1] Find by Id\n"
+				+ "[2] Find by Name\n"
 				+ "[0] EXIT\n"
 				+ "_______________________\n\n");
 	}
