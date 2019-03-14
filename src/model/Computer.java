@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Computer {
 
@@ -81,10 +81,12 @@ public class Computer {
 	
 	public String toString() {
 		String ret = "\n -Computer-\n" 
-				+ "id : " + this.getId() + "\n"
-				+ "name : " + this.getName() + "\n"
-				+ "company id : " + this.getManufacturerId() + "\n"
-				+ "_____________\n";
+				+ "| id : " + this.getId() + "\n"
+				+ "| name : " + this.getName() + "\n"
+				+ "| company id : " + this.getManufacturerId() + "\n"
+				+ "| introduced date : " + this.getDateIntroduced() + "\n"
+				+ "| discontinued date : " + this.getDateDiscontinued() + "\n"
+				+ "_________________\n";
 		
 		return ret;
 	}

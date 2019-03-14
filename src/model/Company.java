@@ -40,8 +40,8 @@ public class Company {
 
 	public String toString() {
 		String ret = "\n -Company-\n"
-				+ "id : " + this.getId() + "\n"
-				+ "name : " + this.getName() + "\n"
+				+ "| id : " + this.getId() + "\n"
+				+ "| name : " + this.getName() + "\n"
 				+ "_____________\n";
 
 		return ret;

@@ -16,7 +16,9 @@ public class ComputerDaoImpl implements ComputerDao {
 	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM computer LIMIT ?";
 	private static final String SQL_FIND_BY_NAME = "SELECT * FROM computer WHERE name = ?";
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM computer WHERE id = ?";
-	private static final String SQL_INSERT = "INSERT INTO computer (name, company_id, introduced, discontinued) VALUES (?, ?, ?, ?))";
+	private static final String SQL_INSERT = "INSERT INTO computer (name, company_id, introduced, discontinued) VALUES (?, ?, ?, ?)";
+	private static final String SQL_UPDATE = "UPDATE computer SET name=?, company_id=?, introduced=?, discontinued=? WHERE id = ?";
+	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
 	private DAOFactory daoFactory;
 	
 	////////CONSTRUCTOR//////
@@ -35,7 +37,10 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, 
-					computer.getName(), computer.getManufacturerId(), computer.getDateIntroduced(), computer.getDateDiscontinued());
+					computer.getName(), 
+					computer.getManufacturerId(), 
+					computer.getDateIntroduced(), 
+					computer.getDateDiscontinued());
 			int statut = preparedStatement.executeUpdate();
 			
 			if(statut == 0) {
@@ -45,6 +50,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			valeurAutoGenerees = preparedStatement.getGeneratedKeys();
 			if(valeurAutoGenerees.next()) {
 				computer.setId(valeurAutoGenerees.getInt(1));
+				System.out.println("\nNEW COMPUTER\n" + computer); 
 			}else {
 				throw new DAOException("Echec de la creation de -computer-, aucune ligne ajoutee dans la table");
 			}
@@ -119,6 +125,9 @@ public class ComputerDaoImpl implements ComputerDao {
 			if(resultSet.next()) {
 				computer = map(resultSet);
 			}
+			else
+				System.out.println("\n This computer does not exist");
+			
 		}catch(SQLException e){
 			throw new DAOException(e);
 		}finally {
@@ -143,6 +152,9 @@ public class ComputerDaoImpl implements ComputerDao {
 			if(resultSet.next()) {
 				computer = map(resultSet);
 			}
+			else
+				System.out.println("\n This computer does not exist");
+			
 		}catch(SQLException e){
 			throw new DAOException(e);
 		}finally {
@@ -151,15 +163,74 @@ public class ComputerDaoImpl implements ComputerDao {
 		
 		return computer;
 	}
+	
+	@Override
+	public boolean update(Computer cpu) throws DAOException {
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		int statut;
+		
+		try {
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, true, 
+					cpu.getName(),
+					cpu.getManufacturerId(),
+					cpu.getDateIntroduced(),
+					cpu.getDateDiscontinued(),
+					cpu.getId());
+			statut = preparedStatement.executeUpdate();
+			
+			if(statut == 0) {
+				System.out.println("\n This computer does not exist");
+				return false;
+			}
+			
+			return true;
+		}catch(SQLException e) {
+			throw new DAOException(e);
+		}finally {
+			fermeturesSilencieuses(preparedStatement, connexion);
+		}
+	}
+	
+	@Override
+	public boolean delete(Computer cpu) throws DAOException {
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		int statut;
+		
+		try {
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion,SQL_DELETE, true, cpu.getId());
+			statut = preparedStatement.executeUpdate();
+			
+			if(statut == 0) {
+				System.out.println("\n This computer does not exist");
+				return false;
+			}
+			
+			return true;
+			
+		}catch(SQLException e){
+			throw new DAOException(e);
+			
+		}finally {
+			fermeturesSilencieuses(preparedStatement, connexion);;
+		}
+	}
 
 	/////////MAPPING////////
 	
 	private static Computer map( ResultSet resultSet ) throws SQLException {
 	    Computer computer = new Computer();
+	    
 	    computer.setId( resultSet.getInt( "id" ) );
 	    computer.setName( resultSet.getString( "name" ) );
 	    computer.setManufacturerId(resultSet.getInt( "company_id"));
-//TODO Ajouter mapping des dates
+	    computer.setDateIntroduced(resultSet.getDate("introduced"));
+	    computer.setDateDiscontinued(resultSet.getDate("discontinued"));
+	    
 	    return computer;
 	}
+
 }
