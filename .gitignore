@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/java,linux,eclipse,java-web
-# Edit at https://www.gitignore.io/?templates=java,linux,eclipse,java-web
+# Created by https://www.gitignore.io/api/java,maven,linux,eclipse,java-web
+# Edit at https://www.gitignore.io/?templates=java,maven,linux,eclipse,java-web
 
 ### Eclipse ###
 
@@ -100,6 +100,7 @@ hs_err_pid*
 ### Java-Web ###
 ## ignoring target file
 target/
+
 ### Linux ###
 *~
 
@@ -115,5 +116,15 @@ target/
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-# End of https://www.gitignore.io/api/java,linux,eclipse,java-web
-/build/
+### Maven ###
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# End of https://www.gitignore.io/api/java,maven,linux,eclipse,java-web
