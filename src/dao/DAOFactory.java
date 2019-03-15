@@ -54,6 +54,7 @@ public class DAOFactory {
             throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
         }*/
 
+        //TODO Extraire proprietes
         url = "jdbc:mysql://localhost:3306/computer-database-db";
         driver = "com.mysql.jdbc.Driver";
         nomUtilisateur = "admincdb";

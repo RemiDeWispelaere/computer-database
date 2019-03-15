@@ -1,16 +1,13 @@
+/**
+ * @author DE WISPELAERE Rémi
+ */
 package controller;
 
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
 
 import dao.DAOFactory;
 import model.Company;
@@ -18,7 +15,6 @@ import model.Computer;
 import model.PageManager;
 import dao.CompanyDaoImpl;
 import dao.ComputerDaoImpl;
-import controller.Cli;
 
 public class Launcher {
 
@@ -27,72 +23,45 @@ public class Launcher {
 	static CompanyDaoImpl companyDao = (CompanyDaoImpl) daoFactory.getCompanyDao();
 
 	static Scanner scanner = new Scanner(System.in);
-
-	public Launcher() {
-
+	
+	enum MainChoice{
+		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE;
+	}
+	
+	enum QueryChoice{
+		BY_ID, BY_NAME;
+	}
+	
+	enum PageAction{
+		STOP, NEXT, PREV;
 	}
 
-	public static void main(String[] args) throws org.apache.commons.cli.ParseException{ 
-
-		System.out.println("-_-_-_-_-_INIT-_-_-_-_-");
-
-		//////////////////////////////////////////////////////////////
-		/*CLI par ligne de commande
-		 * A retirer une fois l'interface d'utilisation finie
-		 */
-		////////CLI////////
-		/*final Options options = Cli.configParameters();
-		final CommandLineParser parser = new DefaultParser();
-		final CommandLine line = parser.parse(options, args);
-
-		//Table name option
-		String tableName = line.getOptionValue("table", "computer");
-
-		//Query type option
-		char queryType = line.getOptionValue("querytype", "s").charAt(0);
-
-		//Name argument for the query
-		String nameQuery = "";
-		if(line.hasOption("nameArg")) {
-			nameQuery = line.getOptionValue("nameArg");
-		}
-
-		//Limit option
-		int limitNumber;
-		if(line.hasOption("limit")) {
-			try {
-				limitNumber = Integer.valueOf(line.getOptionValue("limit"));
-			}catch(Exception e) {
-				System.out.println("Invalid argument for the limit option, integer was expected");
-			}
-		}*/
-		///////////////////////////////////////////////////////////////////////////////////
-
-		int choice;
+	public static void main(String[] args){ 
 
 		System.out.println("-_-_-_-_-_START-_-_-_-_-");
 
+		MainChoice choice = MainChoice.EXIT;
 		do {
 			printMenu();
-			choice = askChoice(6);
+			choice = MainChoice.values()[askChoice(6)];
 
 			switch(choice) {
-			case 1: //List of computers
+			case ALL_COMPUTERS: //List of computers
 				printAllComputer();
 				break;
-			case 2: //List of companies
+			case ALL_COMPANIES: //List of companies
 				printAllCompanies();
 				break;
-			case 3: //Computer details
+			case DETAILS: //Computer details
 				searchComputerDetails();
 				break;
-			case 4: //Create a new computer
+			case CREATE: //Create a new computer
 				createNewComputer();
 				break;
-			case 5: //Update a computer
+			case UPDATE: //Update a computer
 				updateComputer();
 				break;
-			case 6: //Delete computer
+			case DELETE: //Delete computer
 				deleteComputer();
 				break;
 			default:
@@ -100,11 +69,10 @@ public class Launcher {
 			}
 
 			//PAUSE//
-			if(choice != 0) 
+			if(choice != MainChoice.EXIT) 
 				pause();
 
-		}while(choice != 0);
-
+		}while(choice != MainChoice.EXIT);
 
 		System.out.println("-_-_-_-_-_STOP-_-_-_-_-");
 
@@ -162,10 +130,10 @@ public class Launcher {
 
 	public static Computer searchComputerDetails() {
 		printComputerQueryMenu();
-		int choice2 = askChoice(2);
+		QueryChoice choice = QueryChoice.values()[askChoice(2)];
 
-		switch(choice2) {
-		case 1://find by Id
+		switch(choice) {
+		case BY_ID://find by Id
 			System.out.print("ENTER THE ID : ");
 			try {
 				int id = Integer.valueOf(scanner.nextLine());
@@ -178,7 +146,7 @@ public class Launcher {
 				System.out.println("INVALID ID (integer only)");
 			}
 			break;
-		case 2://find by Name
+		case BY_NAME://find by Name
 			System.out.print("ENTER THE NAME : ");
 			String name = scanner.nextLine();
 
@@ -226,49 +194,49 @@ public class Launcher {
 	public static void printAllComputer() {
 		List<Computer> allComputers = computerDao.findAll();
 		PageManager<Computer> pageManager = new PageManager<>(allComputers);
-		String choice;
-		
+		PageAction choice = PageAction.STOP;
+
 		do {
 			pageManager.printCurrentPage();
 			pageManager.printPageActions();
 			choice = askPageAction();
-			
+
 			switch(choice) {
-			case "NEXT":
+			case NEXT:
 				pageManager.next();
 				break;
-			case "PREV":
+			case PREV:
 				pageManager.previous();
 				break;
 			default:
 				//
 			}
 
-		}while(!choice.equals("STOP"));
+		}while(!choice.equals(PageAction.STOP));
 	}
 
 	public static void printAllCompanies() {
 		List<Company> allCompanies = companyDao.findAll();
 		PageManager<Company> pageManager = new PageManager<>(allCompanies);
-		String choice;
-		
+		PageAction choice;
+
 		do {
 			pageManager.printCurrentPage();
 			pageManager.printPageActions();
 			choice = askPageAction();
-			
+
 			switch(choice) {
-			case "NEXT":
+			case NEXT:
 				pageManager.next();
 				break;
-			case "PREV":
+			case PREV:
 				pageManager.previous();
 				break;
 			default:
 				//
 			}
 
-		}while(!choice.equals("STOP"));
+		}while(!choice.equals(PageAction.STOP));
 	}
 
 	////////CHOICE////////
@@ -285,7 +253,7 @@ public class Launcher {
 		return Integer.valueOf(choice);
 	}
 
-	public static String askPageAction() {
+	public static PageAction askPageAction() {
 		System.out.print("ACTION : ");
 		String choice = scanner.nextLine();
 
@@ -295,11 +263,11 @@ public class Launcher {
 		}
 
 		if(choice.isEmpty() || choice.toUpperCase().equals("NEXT"))
-			return "NEXT";
+			return PageAction.NEXT;
 		else if(choice.toUpperCase().equals("PREV") || choice.toUpperCase().equals("PREVIOUS"))
-			return "PREV";
+			return PageAction.PREV;
 		else if(choice.toUpperCase().equals("STOP") || choice.toUpperCase().equals("0"))
-			return "STOP";
+			return PageAction.STOP;
 
 
 		return null;
