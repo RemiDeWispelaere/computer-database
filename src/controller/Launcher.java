@@ -40,6 +40,7 @@ public class Launcher {
 
 		System.out.println("-_-_-_-_-_START-_-_-_-_-");
 
+		//Menu principal
 		MainChoice choice = MainChoice.EXIT;
 		do {
 			printMenu();
@@ -78,6 +79,9 @@ public class Launcher {
 
 	}
 
+	/**
+	 * Add a new computer to the DB
+	 */
 	public static void createNewComputer() {
 		//Name
 		System.out.print("ENTER THE NAME : ");
@@ -91,9 +95,13 @@ public class Launcher {
 		//Discontinued date
 		Date nDisconDate = askDiscontinuedDate();
 
-		computerDao.add(new Computer(0, nName, nCompany, nIntroDate, nDisconDate)); //Id est auto incrementee par le dao
+		//Id est auto incrementee par le dao
+		computerDao.add(new Computer(0, nName, nCompany, nIntroDate, nDisconDate)); 
 	}
 
+	/**
+	 * Modify a computer's details
+	 */
 	public static void updateComputer() {
 		System.out.println("Search which computer you want to update\n");
 		Computer cpuToUpdate = searchComputerDetails();
@@ -117,6 +125,9 @@ public class Launcher {
 		System.out.println(computerDao.findById(cpuToUpdate.getId()));
 	}
 
+	/**
+	 * Delete a computer of the DB
+	 */
 	public static void deleteComputer() {
 		System.out.println("Search which computer you want to delete\n");
 		Computer cpuToDelete = searchComputerDetails();
@@ -128,6 +139,11 @@ public class Launcher {
 			computerDao.delete(cpuToDelete);
 	}
 
+	/**
+	 * Get a computer (search by Id or by Name)
+	 * 
+	 * @return the computer found by the search
+	 */
 	public static Computer searchComputerDetails() {
 		printComputerQueryMenu();
 		QueryChoice choice = QueryChoice.values()[askChoice(2)];
@@ -162,6 +178,9 @@ public class Launcher {
 	}
 
 	////////PRINTS////////
+	/**
+	 * Print the main menu on the console (6 options)
+	 */
 	public static void printMenu() {
 		System.out.println("_____MAIN MENU_____\n\n"
 				+ "[1] List of computers\n"
@@ -174,6 +193,9 @@ public class Launcher {
 				+ "_______________________\n\n");
 	}
 
+	/**
+	 * Print the difference query options on the console to search for a computer (2 options)
+	 */
 	public static void printComputerQueryMenu() {
 		System.out.println("_____COMPUTER DETAILS MENU_____\n\n"
 				+ "[1] Find by Id\n"
@@ -182,6 +204,9 @@ public class Launcher {
 				+ "_______________________\n\n");
 	}
 
+	/**
+	 * Print the validation menu of a deletion (2 options)
+	 */
 	public static void printDeleteValidation() {
 		System.out.println("_____ARE YOU SUR ?_____\n\n"
 				+ "[1] YES, I'M SUR\n"
@@ -189,8 +214,11 @@ public class Launcher {
 				+ "_______________________\n\n");
 	}
 
-
-
+	/**
+	 * Print the list of all the computers in the DB
+	 * The list is printed on many pages if needed
+	 * A DAO is used for the request
+	 */
 	public static void printAllComputer() {
 		List<Computer> allComputers = computerDao.findAll();
 		PageManager<Computer> pageManager = new PageManager<>(allComputers);
@@ -215,6 +243,11 @@ public class Launcher {
 		}while(!choice.equals(PageAction.STOP));
 	}
 
+	/**
+	 * Print the list of all the companies in the DB
+	 * The list is printed on many pages if needed
+	 * A DAO is used for the request
+	 */
 	public static void printAllCompanies() {
 		List<Company> allCompanies = companyDao.findAll();
 		PageManager<Company> pageManager = new PageManager<>(allCompanies);
@@ -241,11 +274,17 @@ public class Launcher {
 
 	////////CHOICE////////
 
-	public static int askChoice(int upper) {
+	/**
+	 * Ask the user to take a decision, mainly used after the print of a menu
+	 * 
+	 * @param max The maximum value possible of the current menu
+	 * @return A valid decision
+	 */
+	public static int askChoice(int max) {
 		System.out.print("CHOICE : ");
 		String choice = scanner.nextLine();
 
-		while(!validChoice(choice, upper)) {
+		while(!validChoice(choice, max)) {
 			System.out.print("CHOICE : ");
 			choice = scanner.nextLine();
 		}
@@ -253,6 +292,11 @@ public class Launcher {
 		return Integer.valueOf(choice);
 	}
 
+	/**
+	 * Ask the user to take a decision about the current page, used after the print of a page
+	 * 
+	 * @return A valid decision (NEXT || PREV || STOP)
+	 */
 	public static PageAction askPageAction() {
 		System.out.print("ACTION : ");
 		String choice = scanner.nextLine();
@@ -273,6 +317,10 @@ public class Launcher {
 		return null;
 	}
 
+	/**
+	 * Ask the user to give a company's id, used during the creation of a new computer 
+	 * @return A valid company Id enter by the user
+	 */
 	public static int askCompanyId() {
 		String stCompany;
 		do {
@@ -292,6 +340,12 @@ public class Launcher {
 		return Integer.valueOf(stCompany);
 	}
 
+	/**
+	 * Ask the user to give a company's id, used during the update of an existing computer
+	 * 
+	 * @param currentId The company's Id of the computer the user is updating
+	 * @return A valid company Id enter by the user
+	 */
 	public static int askNewCompanyId(int currentId) {
 		String stCompany;
 		do {
@@ -314,6 +368,11 @@ public class Launcher {
 		return Integer.valueOf(stCompany);
 	}
 
+	/**
+	 * Ask the user to give the date of the introduce of the new computer, used during the creation of a new computer
+	 * 
+	 * @return A valid Date for the new computer (can be null)
+	 */
 	public static Date askIntroducedDate() {
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -333,6 +392,12 @@ public class Launcher {
 		}
 	}
 
+	/**
+	 * Ask the user to give the date of the introduce of a computer, used during the update of a computer
+	 * 
+	 * @param currentDate The introduced date of the computer the user is updating
+	 * @return A valid Date for the computer (can be null)
+	 */
 	public static Date askNewIntroducedDate(Date currentDate) {
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -352,6 +417,11 @@ public class Launcher {
 		}
 	}
 
+	/**
+	 * Ask the user to give the date of the discontinue of the new computer, used during the creation of a new computer
+	 * 
+	 * @return A valid discontinued date for the new computer (can be null | Warning : can be prior to the introduced date)
+	 */
 	//TODO verifier que la date est bien posterieur a celle d'introduction
 	public static Date askDiscontinuedDate() {
 		String stDate;
@@ -372,6 +442,12 @@ public class Launcher {
 		}
 	}
 
+	/**
+	 * Ask the user to give the date of the discontinue of a computer, used during the update of a computer
+	 * 
+	 * @param currentDate The discontinued date of the computer the user is updating
+	 * @return A valid discontinued date for the computer (can be null | Warning : can be prior to the introduced date)
+	 */
 	public static Date askNewDiscontinuedDate(Date currentDate) {
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -391,7 +467,14 @@ public class Launcher {
 		}
 	}
 
-	public static boolean validChoice(String choice, int upper) {
+	/**
+	 * Called to check if the user's choice is valid
+	 * 
+	 * @param choice The choice input by the user
+	 * @param max The maximum value possible of the current menu
+	 * @return true when the choice is valid, false if it's not
+	 */
+	public static boolean validChoice(String choice, int max) {
 		int iChoice;
 
 		try{
@@ -401,7 +484,7 @@ public class Launcher {
 			return false;
 		}
 
-		if(iChoice >= 0 && iChoice <= upper)
+		if(iChoice >= 0 && iChoice <= max)
 			return true;
 		else {
 			System.out.println("INVALID CHOICE (out of limit)");
@@ -409,6 +492,11 @@ public class Launcher {
 		}
 	}
 
+	/**
+	 * Called to check if the user's action is valid while navigating between pages
+	 * @param choice The choice input by the user
+	 * @return true if the input is valid, false if it's not
+	 */
 	public static boolean validPageAction(String choice) {
 		if(choice.isEmpty() || choice.toUpperCase().equals("NEXT") ||
 				choice.toUpperCase().equals("PREV") || choice.toUpperCase().equals("PREVIOUS") ||
@@ -420,6 +508,9 @@ public class Launcher {
 		}
 	}
 
+	/**
+	 * Wait an input before continue the execution 
+	 */
 	////////PAUSE////////
 	public static void pause() {
 		System.out.println("\n[ENTER TO RETURN TO THE MAIN MENU]");

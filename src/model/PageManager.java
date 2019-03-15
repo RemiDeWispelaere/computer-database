@@ -15,7 +15,7 @@ public class PageManager<T> {
 	public PageManager() {
 
 	}
-
+	
 	public PageManager(List<T> nDatas) {
 		this.datas = nDatas;
 		this.index = 0;
