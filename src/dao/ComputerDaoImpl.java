@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Computer;
 import static dao.DAOUtilitaire.*;
 
@@ -20,6 +23,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, company_id=?, introduced=?, discontinued=? WHERE id = ?";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
 	private DAOFactory daoFactory;
+	private Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 	
 	////////CONSTRUCTOR//////
 	
@@ -30,6 +34,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	////////QUERIES////////
 	@Override
 	public void add(Computer computer) throws DAOException {
+		
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet valeurAutoGenerees = null;
@@ -41,6 +46,7 @@ public class ComputerDaoImpl implements ComputerDao {
 					computer.getManufacturerId(), 
 					computer.getDateIntroduced(), 
 					computer.getDateDiscontinued());
+			logger.info("accès à la base de données : " + preparedStatement);
 			int statut = preparedStatement.executeUpdate();
 			
 			if(statut == 0) {
@@ -52,6 +58,7 @@ public class ComputerDaoImpl implements ComputerDao {
 				computer.setId(valeurAutoGenerees.getInt(1));
 				System.out.println("\nNEW COMPUTER\n" + computer); 
 			}else {
+				logger.error("ECHEC de la requete (" + SQL_INSERT + ")");
 				throw new DAOException("Echec de la creation de -computer-, aucune ligne ajoutee dans la table");
 			}
 		}catch(SQLException e) {
@@ -72,6 +79,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,SQL_FIND_ALL, false);
+			logger.info("accès à la base de données : " + preparedStatement);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
@@ -96,6 +104,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,SQL_FIND_ALL_WITH_LIMIT, false, limit);
+			logger.info("accès à la base de données : " + preparedStatement);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
@@ -120,6 +129,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,SQL_FIND_BY_ID, false, id);
+			logger.info("accès à la base de données : " + preparedStatement);
 			resultSet = preparedStatement.executeQuery();
 			
 			if(resultSet.next()) {
@@ -147,6 +157,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,SQL_FIND_BY_NAME, false, name);
+			logger.info("accès à la base de données : " + preparedStatement);
 			resultSet = preparedStatement.executeQuery();
 			
 			if(resultSet.next()) {
@@ -178,6 +189,7 @@ public class ComputerDaoImpl implements ComputerDao {
 					cpu.getDateIntroduced(),
 					cpu.getDateDiscontinued(),
 					cpu.getId());
+			logger.info("accès à la base de données : " + preparedStatement);
 			statut = preparedStatement.executeUpdate();
 			
 			if(statut == 0) {
@@ -202,6 +214,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,SQL_DELETE, true, cpu.getId());
+			logger.info("accès à la base de données : " + preparedStatement);
 			statut = preparedStatement.executeUpdate();
 			
 			if(statut == 0) {
