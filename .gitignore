@@ -128,3 +128,7 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # End of https://www.gitignore.io/api/java,maven,linux,eclipse,java-web
+/build/
+
+# Log files
+info.log

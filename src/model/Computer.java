@@ -11,7 +11,7 @@ public class Computer {
 
 	private int id;
 	private String name;
-	private int manufacturerId;
+	private Long manufacturerId;
 	private Date dateIntroduced;
 	private Date dateDiscontinued;
 	
@@ -30,7 +30,7 @@ public class Computer {
 	 * @param nDateIntro The computer's introduced date
 	 * @param nDateDiscon The computer's discontinued date
 	 */
-	public Computer(int nId, String nName, int nManufac, Date nDateIntro, Date nDateDiscon) {
+	public Computer(int nId, String nName, Long nManufac, Date nDateIntro, Date nDateDiscon) {
 		this.id = nId;
 		this.name = nName;
 		this.manufacturerId = nManufac;
@@ -84,7 +84,7 @@ public class Computer {
 	 * 
 	 * @param nManId The new computer's company Id
 	 */
-	public void setManufacturerId(int nManId) {
+	public void setManufacturerId(Long nManId) {
 		this.manufacturerId = nManId;
 	}
 	
@@ -93,7 +93,7 @@ public class Computer {
 	 * 
 	 * @return The current computer's company Id
 	 */
-	public int getManufacturerId() {
+	public Long getManufacturerId() {
 		return this.manufacturerId;
 	}
 	

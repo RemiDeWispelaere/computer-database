@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dao.DAOFactory;
 import model.Company;
@@ -23,7 +25,7 @@ public class Launcher {
 	static CompanyDaoImpl companyDao = (CompanyDaoImpl) daoFactory.getCompanyDao();
 
 	static Scanner scanner = new Scanner(System.in);
-	
+	static Logger logger = LoggerFactory.getLogger(Launcher.class);
 	enum MainChoice{
 		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE;
 	}
@@ -38,8 +40,9 @@ public class Launcher {
 
 	public static void main(String[] args){ 
 
-		System.out.println("-_-_-_-_-_START-_-_-_-_-");
-
+		logger.info("START");
+		System.out.println("-_-_-_-_START_-_-_-_-");
+		
 		//Menu principal
 		MainChoice choice = MainChoice.EXIT;
 		do {
@@ -48,7 +51,7 @@ public class Launcher {
 
 			switch(choice) {
 			case ALL_COMPUTERS: //List of computers
-				printAllComputer();
+				printAllComputers();
 				break;
 			case ALL_COMPANIES: //List of companies
 				printAllCompanies();
@@ -75,20 +78,21 @@ public class Launcher {
 
 		}while(choice != MainChoice.EXIT);
 
-		System.out.println("-_-_-_-_-_STOP-_-_-_-_-");
-
+		logger.info("STOP");
+		System.out.println("-_-_-_-_STOP_-_-_-_-");
 	}
 
 	/**
 	 * Add a new computer to the DB
 	 */
 	public static void createNewComputer() {
+		logger.info("create a new computer");
 		//Name
 		System.out.print("ENTER THE NAME : ");
 		String nName = scanner.nextLine();
 
 		//Company id
-		int nCompany = askCompanyId();
+		Long nCompany = askCompanyId();
 
 		//Introduced date
 		Date nIntroDate = askIntroducedDate();
@@ -96,13 +100,14 @@ public class Launcher {
 		Date nDisconDate = askDiscontinuedDate();
 
 		//Id est auto incrementee par le dao
-		computerDao.add(new Computer(0, nName, nCompany, nIntroDate, nDisconDate)); 
+		computerDao.add(new Computer(0, nName, nCompany, nIntroDate, nDisconDate));
 	}
 
 	/**
 	 * Modify a computer's details
 	 */
 	public static void updateComputer() {
+		logger.info("update computer");
 		System.out.println("Search which computer you want to update\n");
 		Computer cpuToUpdate = searchComputerDetails();
 
@@ -114,7 +119,7 @@ public class Launcher {
 			nName = cpuToUpdate.getName();
 
 		//Company id
-		int nCompany = askNewCompanyId(cpuToUpdate.getManufacturerId());
+		Long nCompany = askNewCompanyId(cpuToUpdate.getManufacturerId());
 
 		//Introduced date
 		Date nIntroDate = askNewIntroducedDate(cpuToUpdate.getDateIntroduced());
@@ -129,6 +134,7 @@ public class Launcher {
 	 * Delete a computer of the DB
 	 */
 	public static void deleteComputer() {
+		logger.info("delete computer");
 		System.out.println("Search which computer you want to delete\n");
 		Computer cpuToDelete = searchComputerDetails();
 
@@ -145,8 +151,9 @@ public class Launcher {
 	 * @return the computer found by the search
 	 */
 	public static Computer searchComputerDetails() {
+		logger.info("computer details");
 		printComputerQueryMenu();
-		QueryChoice choice = QueryChoice.values()[askChoice(2)];
+		QueryChoice choice = QueryChoice.values()[askChoice(2) - 1];
 
 		switch(choice) {
 		case BY_ID://find by Id
@@ -219,7 +226,8 @@ public class Launcher {
 	 * The list is printed on many pages if needed
 	 * A DAO is used for the request
 	 */
-	public static void printAllComputer() {
+	public static void printAllComputers() {
+		logger.info("print all computers");
 		List<Computer> allComputers = computerDao.findAll();
 		PageManager<Computer> pageManager = new PageManager<>(allComputers);
 		PageAction choice = PageAction.STOP;
@@ -249,6 +257,7 @@ public class Launcher {
 	 * A DAO is used for the request
 	 */
 	public static void printAllCompanies() {
+		logger.info("print all companies");
 		List<Company> allCompanies = companyDao.findAll();
 		PageManager<Company> pageManager = new PageManager<>(allCompanies);
 		PageAction choice;
@@ -289,6 +298,7 @@ public class Launcher {
 			choice = scanner.nextLine();
 		}
 
+		logger.info("user chosen : " + choice); 
 		return Integer.valueOf(choice);
 	}
 
@@ -306,14 +316,20 @@ public class Launcher {
 			choice = scanner.nextLine();
 		}
 
-		if(choice.isEmpty() || choice.toUpperCase().equals("NEXT"))
+		if(choice.isEmpty() || choice.toUpperCase().equals("NEXT")) {
+			logger.info("user page action : " + PageAction.NEXT);
 			return PageAction.NEXT;
-		else if(choice.toUpperCase().equals("PREV") || choice.toUpperCase().equals("PREVIOUS"))
+		}
+		else if(choice.toUpperCase().equals("PREV") || choice.toUpperCase().equals("PREVIOUS")) {
+			logger.info("user page action : " + PageAction.PREV);
 			return PageAction.PREV;
-		else if(choice.toUpperCase().equals("STOP") || choice.toUpperCase().equals("0"))
+		}
+		else if(choice.toUpperCase().equals("STOP") || choice.toUpperCase().equals("0")) {
+			logger.info("user page action : " + PageAction.STOP);
 			return PageAction.STOP;
-
-
+		}
+		
+		logger.info("user page action : wrong choice");
 		return null;
 	}
 
@@ -321,7 +337,8 @@ public class Launcher {
 	 * Ask the user to give a company's id, used during the creation of a new computer 
 	 * @return A valid company Id enter by the user
 	 */
-	public static int askCompanyId() {
+	public static Long askCompanyId() {
+		logger.info("ask company id (new computer)");
 		String stCompany;
 		do {
 			System.out.print("ENTER THE MANUFACTURER ID (TYPE [LIST] TO PRINT THE LIST OF MANUFACTURER) : ");
@@ -337,7 +354,8 @@ public class Launcher {
 		}while(!validChoice(stCompany, 43)); 
 		//TODO gerer le nombre de company limite dynamiquement
 
-		return Integer.valueOf(stCompany);
+		logger.info("company id chosen (new computer) : " + stCompany);
+		return Long.valueOf(stCompany);
 	}
 
 	/**
@@ -346,7 +364,8 @@ public class Launcher {
 	 * @param currentId The company's Id of the computer the user is updating
 	 * @return A valid company Id enter by the user
 	 */
-	public static int askNewCompanyId(int currentId) {
+	public static Long askNewCompanyId(Long currentId) {
+		logger.info("ask company id (update computer)");
 		String stCompany;
 		do {
 			System.out.print("ENTER THE NEW MANUFACTURER ID (TYPE [LIST] TO PRINT THE LIST OF MANUFACTURER | EMPTY TO KEEP THE SAME ["+ currentId +"]) : ");
@@ -365,7 +384,8 @@ public class Launcher {
 		}while(!validChoice(stCompany, 43)); 
 		//TODO gerer le nombre de company limite dynamiquement
 
-		return Integer.valueOf(stCompany);
+		logger.info("company id chosen (update computer) : " + stCompany);
+		return Long.valueOf(stCompany);
 	}
 
 	/**
@@ -374,19 +394,25 @@ public class Launcher {
 	 * @return A valid Date for the new computer (can be null)
 	 */
 	public static Date askIntroducedDate() {
+		logger.info("ask introduce date (new computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
 
 		System.out.print("WHEN WAS THE COMPUTER INTRODUCED ? (FORMAT dd mm yyyy | LET EMPTY IF YOU DO NOT KNOW) : ");
 		stDate = scanner.nextLine();
 
-		if(stDate.isEmpty())
+		if(stDate.isEmpty()) {
+			logger.info("introduce date chosen (new computer) : none");
 			return null;
+		}
+			
 
 		try {
+			logger.info("introduce date chosen (new computer) : " + stDate);
 			return new Date(dateFormat.parse(stDate).getTime());
 
 		}catch(ParseException e) {
+			logger.info("introduce date chosen (new computer) : invalid entry");
 			System.out.println("INVALID DATE");
 			return null;
 		}
@@ -399,19 +425,25 @@ public class Launcher {
 	 * @return A valid Date for the computer (can be null)
 	 */
 	public static Date askNewIntroducedDate(Date currentDate) {
+		logger.info("ask introduce date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
 
 		System.out.print("WHEN WAS THE COMPUTER INTRODUCED ? (FORMAT dd mm yyyy | EMPTY TO KEEP THE SAME [" + currentDate + "]) : ");
 		stDate = scanner.nextLine();
 
-		if(stDate.isEmpty())
+		if(stDate.isEmpty()) {
+			logger.info("introduce date chosen (update computer) : none");
 			return currentDate;
+		}
+			
 
 		try {
+			logger.info("introduce date chosen (update computer) : " + stDate);
 			return new Date(dateFormat.parse(stDate).getTime());
 
 		}catch(ParseException e) {
+			logger.info("introduce date chosen (update computer) : invalid entry");
 			System.out.println("INVALID DATE");
 			return null;
 		}
@@ -424,19 +456,25 @@ public class Launcher {
 	 */
 	//TODO verifier que la date est bien posterieur a celle d'introduction
 	public static Date askDiscontinuedDate() {
+		logger.info("ask discontinue date (new computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
 
 		System.out.print("WHEN WAS THE COMPUTER DISCONTINUED ? (FORMAT dd mm yyyy | LET EMPTY IF YOU DO NOT KNOW) : ");
 		stDate = scanner.nextLine();
 
-		if(stDate.isEmpty())
+		if(stDate.isEmpty()) {
+			logger.info("discontue date chosen (new computer) : none");
 			return null;
+		}
+			
 
 		try {
+			logger.info("discontinue date chosen (new computer) : " + stDate);
 			return new Date(dateFormat.parse(stDate).getTime());
 
 		}catch(ParseException e) {
+			logger.info("discontinue date chosen (new computer) : invalid entry");
 			System.out.println("INVALID DATE");
 			return null;
 		}
@@ -449,19 +487,24 @@ public class Launcher {
 	 * @return A valid discontinued date for the computer (can be null | Warning : can be prior to the introduced date)
 	 */
 	public static Date askNewDiscontinuedDate(Date currentDate) {
+		logger.info("ask discontinue date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
 
 		System.out.print("WHEN WAS THE COMPUTER DISCONTINUED ? (FORMAT dd mm yyyy | EMPTY TO KEEP THE SAME [" + currentDate + "]) : ");
 		stDate = scanner.nextLine();
 
-		if(stDate.isEmpty())
+		if(stDate.isEmpty()) {
+			logger.info("discontinue date chosen (update computer) : none");
 			return currentDate;
+		}
 
 		try {
+			logger.info("discontinue date chosen (update computer) : " + stDate);
 			return new Date(dateFormat.parse(stDate).getTime());
 
 		}catch(ParseException e) {
+			logger.info("discontinue date chosen (update computer) : invalid entry");
 			System.out.println("INVALID DATE");
 			return null;
 		}

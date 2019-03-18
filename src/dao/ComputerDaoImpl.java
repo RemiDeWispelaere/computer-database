@@ -226,7 +226,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	    
 	    computer.setId( resultSet.getInt( "id" ) );
 	    computer.setName( resultSet.getString( "name" ) );
-	    computer.setManufacturerId(resultSet.getInt( "company_id"));
+	    computer.setManufacturerId((Long) resultSet.getObject( "company_id"));
 	    computer.setDateIntroduced(resultSet.getDate("introduced"));
 	    computer.setDateDiscontinued(resultSet.getDate("discontinued"));
 	    
