@@ -14,6 +14,7 @@
 		<slf4j.version>1.7.26</slf4j.version>
 		<slf4j-log.version>1.7.26</slf4j-log.version>
 		<log4j.version>1.2.17</log4j.version>
+		<javax-servlet.version>2.5</javax-servlet.version>
 	</properties>
 
 	<dependencies>
@@ -56,6 +57,15 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax-servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 
 	</dependencies>
 
