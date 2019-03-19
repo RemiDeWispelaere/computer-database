@@ -12,9 +12,9 @@ import model.Computer;
 
 public class ComputerDaoTest {
 
-	private static final String COMPUTER_TEST_NAME = "NANI";
-	private static DAOFactory daoFactory = DAOFactory.getInstance();
-	private static ComputerDaoImpl computerDao = (ComputerDaoImpl) daoFactory.getComputerDao();
+	private final String COMPUTER_TEST_NAME = "NANI";
+	private DAOFactory daoFactory = DAOFactory.getInstance();
+	private ComputerDaoImpl computerDao = (ComputerDaoImpl) daoFactory.getComputerDao();
 	
 	@After
 	public void afterTest() {
