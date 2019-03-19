@@ -132,3 +132,7 @@ buildNumber.properties
 
 # Log files
 info.log
+
+# Test branch
+@test
+!ComputerDaoTest.java
