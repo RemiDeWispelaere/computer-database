@@ -1,11 +1,13 @@
 package servlet;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import dao.ComputerDao;
 import dao.DAOFactory;
 import model.Computer;
 
+@WebServlet("/AddComputer")
 public class AddComputer extends HttpServlet {
 	
 	private Logger logger = LoggerFactory.getLogger(AddComputer.class);
@@ -24,6 +27,12 @@ public class AddComputer extends HttpServlet {
 	
 	public void init(ServletConfig config) throws ServletException{
 		logger.info("initialisation de la servlet AddComputer");
+	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
