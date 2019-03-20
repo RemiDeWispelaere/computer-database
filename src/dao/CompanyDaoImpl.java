@@ -10,8 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import model.Company;
 
@@ -26,7 +28,8 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	public CompanyDaoImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
-		this.logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+		this.logger = Logger.getLogger(CompanyDaoImpl.class);
+		//this.logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	}
 
 	////////QUERIES////////

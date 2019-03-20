@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import model.Computer;
 import static dao.DAOUtilitaire.*;
@@ -23,7 +25,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, company_id=?, introduced=?, discontinued=? WHERE id = ?";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
 	private DAOFactory daoFactory;
-	private Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+	private Logger logger = Logger.getLogger(ComputerDaoImpl.class);
 	
 	////////CONSTRUCTOR//////
 	

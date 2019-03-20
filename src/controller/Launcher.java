@@ -8,8 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
+import org.apache.log4j.Logger;
 
 import dao.DAOFactory;
 import model.Company;
@@ -25,7 +27,8 @@ public class Launcher {
 	static CompanyDaoImpl companyDao = (CompanyDaoImpl) daoFactory.getCompanyDao();
 
 	static Scanner scanner = new Scanner(System.in);
-	static Logger logger = LoggerFactory.getLogger(Launcher.class);
+	static Logger logger = Logger.getLogger(Launcher.class);
+	//static Logger logger = LoggerFactory.getLogger(Launcher.class);
 	enum MainChoice{
 		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE;
 	}
