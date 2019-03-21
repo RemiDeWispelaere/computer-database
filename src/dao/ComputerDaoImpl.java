@@ -44,8 +44,8 @@ public class ComputerDaoImpl implements ComputerDao {
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, 
 					computer.getName(), 
 					computer.getManufacturerId(), 
-					computer.getDateIntroduced(), 
-					computer.getDateDiscontinued());
+					computer.getIntroducedDate(), 
+					computer.getDiscontinuedDate());
 			logger.info("accès à la base de données : " + preparedStatement);
 			int statut = preparedStatement.executeUpdate();
 			
@@ -186,8 +186,8 @@ public class ComputerDaoImpl implements ComputerDao {
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, true, 
 					cpu.getName(),
 					cpu.getManufacturerId(),
-					cpu.getDateIntroduced(),
-					cpu.getDateDiscontinued(),
+					cpu.getIntroducedDate(),
+					cpu.getDiscontinuedDate(),
 					cpu.getId());
 			logger.info("accès à la base de données : " + preparedStatement);
 			statut = preparedStatement.executeUpdate();
@@ -235,13 +235,13 @@ public class ComputerDaoImpl implements ComputerDao {
 	/////////MAPPING////////
 	
 	private static Computer map( ResultSet resultSet ) throws SQLException {
-	    Computer computer = new Computer();
+	    Computer computer = new Computer.ComputerBuilder().build();
 	    
 	    computer.setId( resultSet.getInt( "id" ) );
 	    computer.setName( resultSet.getString( "name" ) );
 	    computer.setManufacturerId((Long) resultSet.getObject( "company_id"));
-	    computer.setDateIntroduced(resultSet.getDate("introduced"));
-	    computer.setDateDiscontinued(resultSet.getDate("discontinued"));
+	    computer.setIntroducedDate(resultSet.getDate("introduced"));
+	    computer.setDiscontinuedDate(resultSet.getDate("discontinued"));
 	    
 	    return computer;
 	}

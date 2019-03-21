@@ -77,7 +77,13 @@ public class AddComputer extends HttpServlet {
 
 		Long companyId = Long.valueOf(stCompanyId);
 
-		computerDao.add(new Computer(0, computerName, companyId, introducedDate, discontinuedDate));
+		Computer computer = new Computer.ComputerBuilder()
+				.withName(computerName)
+				.withCompanyId(companyId)
+				.withIntroducedDate(introducedDate)
+				.withDiscontinuedDate(discontinuedDate)
+				.build();
+		computerDao.add(computer);
 	}
 
 }

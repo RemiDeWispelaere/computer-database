@@ -100,7 +100,13 @@ public class Launcher {
 		Date nDisconDate = askDiscontinuedDate();
 
 		//Id est auto incrementee par le dao
-		computerDao.add(new Computer(0, nName, nCompany, nIntroDate, nDisconDate));
+		Computer computer = new Computer.ComputerBuilder()
+				.withName(nName)
+				.withCompanyId(nCompany)
+				.withIntroducedDate(nIntroDate)
+				.withDiscontinuedDate(nDisconDate)
+				.build();
+		computerDao.add(computer);
 	}
 
 	/**
@@ -122,11 +128,18 @@ public class Launcher {
 		Long nCompany = askNewCompanyId(cpuToUpdate.getManufacturerId());
 
 		//Introduced date
-		Date nIntroDate = askNewIntroducedDate(cpuToUpdate.getDateIntroduced());
+		Date nIntroDate = askNewIntroducedDate(cpuToUpdate.getIntroducedDate());
 		//Discontinued date
-		Date nDisconDate = askNewDiscontinuedDate(cpuToUpdate.getDateDiscontinued());
+		Date nDisconDate = askNewDiscontinuedDate(cpuToUpdate.getDiscontinuedDate());
 
-		computerDao.update(new Computer(cpuToUpdate.getId(), nName, nCompany, nIntroDate, nDisconDate));
+		Computer computer = new Computer.ComputerBuilder()
+				.withId(cpuToUpdate.getId())
+				.withName(nName)
+				.withCompanyId(nCompany)
+				.withIntroducedDate(nIntroDate)
+				.withDiscontinuedDate(nDisconDate)
+				.build();
+		computerDao.update(computer);
 		System.out.println(computerDao.findById(cpuToUpdate.getId()));
 	}
 

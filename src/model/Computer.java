@@ -12,15 +12,19 @@ public class Computer {
 	private int id;
 	private String name;
 	private Long manufacturerId;
-	private Date dateIntroduced;
-	private Date dateDiscontinued;
-	
+	private Date introducedDate;
+	private Date discontinuedDate;
+
 	/////////////CONSTRUCTOR///////////////
-	
-	public Computer() {
-		
+
+	public Computer(ComputerBuilder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.introducedDate = builder.introducedDate;
+		this.discontinuedDate = builder.discontinuedDate;
+		this.manufacturerId = builder.companyId;
 	}
-	
+
 	/**
 	 * Standard constructor
 	 * 
@@ -30,16 +34,16 @@ public class Computer {
 	 * @param nDateIntro The computer's introduced date
 	 * @param nDateDiscon The computer's discontinued date
 	 */
-	public Computer(int nId, String nName, Long nManufac, Date nDateIntro, Date nDateDiscon) {
-		this.id = nId;
-		this.name = nName;
-		this.manufacturerId = nManufac;
-		this.dateIntroduced = nDateIntro;
-		this.dateDiscontinued = nDateDiscon;
-	}
-	
+//	public Computer(int nId, String nName, Long nManufac, Date nDateIntro, Date nDateDiscon) {
+//		this.id = nId;
+//		this.name = nName;
+//		this.manufacturerId = nManufac;
+//		this.introducedDate = nDateIntro;
+//		this.discontinuedDate = nDateDiscon;
+//	}
+
 	//////////////SETTER | GETTER ///////////////////
-	
+
 	//ID
 	/**
 	 * Set the computer's Id
@@ -49,7 +53,7 @@ public class Computer {
 	public void setId(int nId) {
 		this.id = nId;
 	}
-	
+
 	/**
 	 * Get the computer's Id
 	 * 
@@ -58,7 +62,7 @@ public class Computer {
 	public int getId() {
 		return this.id;
 	}
-	
+
 	//NAME
 	/**
 	 * Set the computer's Name
@@ -68,7 +72,7 @@ public class Computer {
 	public void setName(String nName) {
 		this.name = nName;
 	}
-	
+
 	/**
 	 * Get the computer's Name
 	 * 
@@ -77,7 +81,7 @@ public class Computer {
 	public String getName() {
 		return this.name;
 	}
-	
+
 	//MANUFACTURER ID
 	/**
 	 * Set the computer's company Id
@@ -87,7 +91,7 @@ public class Computer {
 	public void setManufacturerId(Long nManId) {
 		this.manufacturerId = nManId;
 	}
-	
+
 	/**
 	 * Get the computer's company Id
 	 * 
@@ -96,56 +100,104 @@ public class Computer {
 	public Long getManufacturerId() {
 		return this.manufacturerId;
 	}
-	
+
 	//DATE INTRODUCED
 	/**
 	 * Set the computer's introduced date
 	 * 
 	 * @param nDate The new computer's introduced date
 	 */
-	public void setDateIntroduced(Date nDate) {
-		this.dateIntroduced = nDate;
+	public void setIntroducedDate(Date nDate) {
+		this.introducedDate = nDate;
 	}
-	
+
 	/**
 	 * Get the computer's introduced date
 	 * 
 	 * @return The current computer's introduced date
 	 */
-	public Date getDateIntroduced() {
-		return this.dateIntroduced;
+	public Date getIntroducedDate() {
+		return this.introducedDate;
 	}
-	
+
 	//DATE DISCONTINUED
 	/**
 	 * Set the computer's discontinued date
 	 * 
 	 * @param nDate The new computer's discontinued date
 	 */
-	public void setDateDiscontinued(Date nDate) {
-		this.dateDiscontinued = nDate;
+	public void setDiscontinuedDate(Date nDate) {
+		this.discontinuedDate = nDate;
 	}
-	
+
 	/**
 	 * Get the computer's discontinued date
 	 * 
 	 * @return The current computer's discontinued date
 	 */
-	public Date getDateDiscontinued() {
-		return this.dateDiscontinued;
+	public Date getDiscontinuedDate() {
+		return this.discontinuedDate;
 	}
-	
+
 	////////TO STRING////////
-	
+
 	public String toString() {
 		String ret = "\n -Computer-\n" 
 				+ "| id : " + this.getId() + "\n"
 				+ "| name : " + this.getName() + "\n"
 				+ "| company id : " + this.getManufacturerId() + "\n"
-				+ "| introduced date : " + this.getDateIntroduced() + "\n"
-				+ "| discontinued date : " + this.getDateDiscontinued() + "\n"
+				+ "| introduced date : " + this.getIntroducedDate() + "\n"
+				+ "| discontinued date : " + this.getDiscontinuedDate() + "\n"
 				+ "_________________\n";
-		
+
 		return ret;
+	}
+
+	public static class ComputerBuilder {
+
+		private int id;
+		private String name;
+		private Date introducedDate;
+		private Date discontinuedDate;
+		private Long companyId;
+
+		public ComputerBuilder() {
+
+		}
+
+		public ComputerBuilder withId(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public ComputerBuilder withName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public ComputerBuilder withIntroducedDate(Date introducedDate) {
+			this.introducedDate = introducedDate;
+			return this;
+		}
+
+		public ComputerBuilder withDiscontinuedDate(Date discontinuedDate) {
+			this.discontinuedDate = discontinuedDate;
+			return this;
+		}
+		
+		public ComputerBuilder withCompanyId(Long companyId) {
+			this.companyId = companyId;
+			return this;
+		}
+
+		public Computer build() {
+			Computer computer = new Computer(this);
+			computer.setId(this.id);
+			computer.setName(this.name);
+			computer.setIntroducedDate(this.introducedDate);
+			computer.setDiscontinuedDate(this.discontinuedDate);
+			computer.setManufacturerId(this.companyId);
+			return computer;
+		}
 	}
 }
