@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -10,11 +9,7 @@ import java.util.Properties;
 
 public class DAOFactory {
 
-    private static final String FICHIER_PROPERTIES       = "/home/excilys/Public/training-java/computer-database/src/dao/dao.properties";
-    private static final String PROPERTY_URL             = "url";
-    private static final String PROPERTY_DRIVER          = "driver";
-    private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
-    private static final String PROPERTY_MOT_DE_PASSE    = "motdepasse";
+    private static final String FICHIER_PROPERTIES       = "dao.properties";
 
     private String              url;
     private String              username;
@@ -37,7 +32,7 @@ public class DAOFactory {
         String nomUtilisateur;
         String motDePasse;
 
-        /*ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
 
         if ( fichierProperties == null ) {
@@ -46,19 +41,13 @@ public class DAOFactory {
 
         try {
             properties.load( fichierProperties );
-            url = "jdbc:mysql://localhost:3306/computer-database-db";
-            driver = "com.myssql.jdbc.Driver";
-            nomUtilisateur = "admincdb";
-            motDePasse = "qwerty1234";
+            url = properties.getProperty("url");
+            driver = properties.getProperty("driver");
+            nomUtilisateur = properties.getProperty("nomUtilisateur");
+            motDePasse = properties.getProperty("motDePasse");
         } catch ( IOException e ) {
             throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
-        }*/
-
-        //TODO Extraire proprietes
-        url = "jdbc:mysql://localhost:3306/computer-database-db";
-        driver = "com.mysql.jdbc.Driver";
-        nomUtilisateur = "admincdb";
-        motDePasse = "qwerty1234";
+        }
         
         try {
             Class.forName( driver );
