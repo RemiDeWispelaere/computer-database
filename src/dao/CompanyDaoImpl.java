@@ -12,24 +12,21 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 import model.Company;
 
 public class CompanyDaoImpl implements CompanyDao {
 
-	private static final String SQL_FIND_ALL = "SELECT * FROM company";
-	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM company LIMIT ?";
+	private static final String SQL_FIND_ALL = "SELECT id, name FROM company";
+	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT id, name FROM company LIMIT ?";
+	private static final Logger logger  = Logger.getLogger(CompanyDaoImpl.class);
+	
 	private DAOFactory daoFactory;
-	private Logger logger;
+	
 
 	////////CONSTRUCTOR//////
 
 	public CompanyDaoImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
-		this.logger = Logger.getLogger(CompanyDaoImpl.class);
-		//this.logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	}
 
 	////////QUERIES////////

@@ -9,23 +9,21 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 import model.Computer;
 import static dao.DAOUtilitaire.*;
 
 public class ComputerDaoImpl implements ComputerDao {
 
-	private static final String SQL_FIND_ALL = "SELECT * FROM computer";
-	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT * FROM computer LIMIT ?";
-	private static final String SQL_FIND_BY_NAME = "SELECT * FROM computer WHERE name = ?";
-	private static final String SQL_FIND_BY_ID = "SELECT * FROM computer WHERE id = ?";
+	private static final String SQL_FIND_ALL = "SELECT id, name, introduced, discontinued, company_id FROM computer";
+	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?";
+	private static final String SQL_FIND_BY_NAME = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE name = ?";
+	private static final String SQL_FIND_BY_ID = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
 	private static final String SQL_INSERT = "INSERT INTO computer (name, company_id, introduced, discontinued) VALUES (?, ?, ?, ?)";
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, company_id=?, introduced=?, discontinued=? WHERE id = ?";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
+	private static final Logger logger = Logger.getLogger(ComputerDaoImpl.class);
+	
 	private DAOFactory daoFactory;
-	private Logger logger = Logger.getLogger(ComputerDaoImpl.class);
 	
 	////////CONSTRUCTOR//////
 	

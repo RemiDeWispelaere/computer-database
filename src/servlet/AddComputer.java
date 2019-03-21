@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import dao.ComputerDao;
 import dao.DAOFactory;
 import model.Computer;
@@ -23,13 +25,22 @@ public class AddComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
-
+	private static final Logger logger = Logger.getLogger(AddComputer.class);
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AddComputer() {
 		super();
 		// TODO Auto-generated constructor stub
+		logger.info("CONSTR");
+	}
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		
+		logger.info("INIT");
 	}
 
 	/**
