@@ -16,14 +16,14 @@ import dao.DAOFactory;
 import model.Company;
 import model.Computer;
 import model.PageManager;
-import dao.CompanyDaoImpl;
-import dao.ComputerDaoImpl;
+import dao.CompanyDao;
+import dao.ComputerDao;
 
 public class Launcher {
 
 	static DAOFactory daoFactory = DAOFactory.getInstance();
-	static ComputerDaoImpl computerDao = (ComputerDaoImpl) daoFactory.getComputerDao();
-	static CompanyDaoImpl companyDao = (CompanyDaoImpl) daoFactory.getCompanyDao();
+	static ComputerDao computerDao = (ComputerDao) daoFactory.getComputerDao();
+	static CompanyDao companyDao = (CompanyDao) daoFactory.getCompanyDao();
 
 	static Scanner scanner = new Scanner(System.in);
 	static Logger logger = Logger.getLogger(Launcher.class);
