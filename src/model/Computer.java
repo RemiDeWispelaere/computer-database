@@ -25,23 +25,6 @@ public class Computer {
 		this.manufacturerId = builder.companyId;
 	}
 
-	/**
-	 * Standard constructor
-	 * 
-	 * @param nId The computer's Id
-	 * @param nName The computer's Name
-	 * @param nManufac The computer's company Id
-	 * @param nDateIntro The computer's introduced date
-	 * @param nDateDiscon The computer's discontinued date
-	 */
-//	public Computer(int nId, String nName, Long nManufac, Date nDateIntro, Date nDateDiscon) {
-//		this.id = nId;
-//		this.name = nName;
-//		this.manufacturerId = nManufac;
-//		this.introducedDate = nDateIntro;
-//		this.discontinuedDate = nDateDiscon;
-//	}
-
 	//////////////SETTER | GETTER ///////////////////
 
 	//ID

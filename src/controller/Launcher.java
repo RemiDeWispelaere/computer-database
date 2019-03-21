@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -95,16 +96,16 @@ public class Launcher {
 		Long nCompany = askCompanyId();
 
 		//Introduced date
-		Date nIntroDate = askIntroducedDate();
+		Optional<Date> nIntroDate = askIntroducedDate();
 		//Discontinued date
-		Date nDisconDate = askDiscontinuedDate();
+		Optional<Date> nDisconDate = askDiscontinuedDate();
 
 		//Id est auto incrementee par le dao
 		Computer computer = new Computer.ComputerBuilder()
 				.withName(nName)
 				.withCompanyId(nCompany)
-				.withIntroducedDate(nIntroDate)
-				.withDiscontinuedDate(nDisconDate)
+				.withIntroducedDate(nIntroDate.orElse(null))
+				.withDiscontinuedDate(nDisconDate.orElse(null))
 				.build();
 		computerDao.add(computer);
 	}
@@ -115,7 +116,7 @@ public class Launcher {
 	public static void updateComputer() {
 		logger.info("update computer");
 		System.out.println("Search which computer you want to update\n");
-		Computer cpuToUpdate = searchComputerDetails();
+		Computer cpuToUpdate = searchComputerDetails().orElseThrow(IllegalArgumentException::new);
 
 		//Name
 		System.out.print("ENTER THE NEW NAME (EMPTY TO KEEP THE SAME [" + cpuToUpdate.getName() + "]) : " );
@@ -128,16 +129,16 @@ public class Launcher {
 		Long nCompany = askNewCompanyId(cpuToUpdate.getManufacturerId());
 
 		//Introduced date
-		Date nIntroDate = askNewIntroducedDate(cpuToUpdate.getIntroducedDate());
+		Optional<Date> nIntroDate = askNewIntroducedDate(cpuToUpdate.getIntroducedDate());
 		//Discontinued date
-		Date nDisconDate = askNewDiscontinuedDate(cpuToUpdate.getDiscontinuedDate());
+		Optional<Date> nDisconDate = askNewDiscontinuedDate(cpuToUpdate.getDiscontinuedDate());
 
 		Computer computer = new Computer.ComputerBuilder()
 				.withId(cpuToUpdate.getId())
 				.withName(nName)
 				.withCompanyId(nCompany)
-				.withIntroducedDate(nIntroDate)
-				.withDiscontinuedDate(nDisconDate)
+				.withIntroducedDate(nIntroDate.orElse(null))
+				.withDiscontinuedDate(nDisconDate.orElse(null))
 				.build();
 		computerDao.update(computer);
 		System.out.println(computerDao.findById(cpuToUpdate.getId()));
@@ -149,7 +150,7 @@ public class Launcher {
 	public static void deleteComputer() {
 		logger.info("delete computer");
 		System.out.println("Search which computer you want to delete\n");
-		Computer cpuToDelete = searchComputerDetails();
+		Computer cpuToDelete = searchComputerDetails().orElseThrow(IllegalArgumentException::new);
 
 		printDeleteValidation();
 		int choice2 = askChoice(2);
@@ -163,7 +164,7 @@ public class Launcher {
 	 * 
 	 * @return the computer found by the search
 	 */
-	public static Computer searchComputerDetails() {
+	public static Optional<Computer> searchComputerDetails() {
 		logger.info("computer details");
 		printComputerQueryMenu();
 		QueryChoice choice = QueryChoice.values()[askChoice(2) - 1];
@@ -177,7 +178,7 @@ public class Launcher {
 				Computer cpu = computerDao.findById(id);
 				System.out.println(cpu);
 
-				return cpu;
+				return Optional.of(cpu);
 			}catch(NumberFormatException e) {
 				System.out.println("INVALID ID (integer only)");
 			}
@@ -189,12 +190,12 @@ public class Launcher {
 			Computer cpu = computerDao.findByName(name);
 			System.out.println(cpu);
 
-			return cpu;
+			return Optional.of(cpu);
 		default:
 			//
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 	////////PRINTS////////
@@ -243,14 +244,14 @@ public class Launcher {
 		logger.info("print all computers");
 		List<Computer> allComputers = computerDao.findAll();
 		PageManager<Computer> pageManager = new PageManager<>(allComputers);
-		PageAction choice = PageAction.STOP;
+		Optional<PageAction> choice;
 
 		do {
 			pageManager.printCurrentPage();
 			pageManager.printPageActions();
 			choice = askPageAction();
 
-			switch(choice) {
+			switch(choice.get()) {
 			case NEXT:
 				pageManager.next();
 				break;
@@ -261,7 +262,7 @@ public class Launcher {
 				//
 			}
 
-		}while(!choice.equals(PageAction.STOP));
+		}while(!choice.get().equals(PageAction.STOP));
 	}
 
 	/**
@@ -273,14 +274,14 @@ public class Launcher {
 		logger.info("print all companies");
 		List<Company> allCompanies = companyDao.findAll();
 		PageManager<Company> pageManager = new PageManager<>(allCompanies);
-		PageAction choice;
+		Optional<PageAction> choice;
 
 		do {
 			pageManager.printCurrentPage();
 			pageManager.printPageActions();
 			choice = askPageAction();
 
-			switch(choice) {
+			switch(choice.get()) {
 			case NEXT:
 				pageManager.next();
 				break;
@@ -291,7 +292,7 @@ public class Launcher {
 				//
 			}
 
-		}while(!choice.equals(PageAction.STOP));
+		}while(!choice.get().equals(PageAction.STOP));
 	}
 
 	////////CHOICE////////
@@ -320,7 +321,7 @@ public class Launcher {
 	 * 
 	 * @return A valid decision (NEXT || PREV || STOP)
 	 */
-	public static PageAction askPageAction() {
+	public static Optional<PageAction> askPageAction() {
 		System.out.print("ACTION : ");
 		String choice = scanner.nextLine();
 
@@ -331,19 +332,19 @@ public class Launcher {
 
 		if(choice.isEmpty() || choice.toUpperCase().equals("NEXT")) {
 			logger.info("user page action : " + PageAction.NEXT);
-			return PageAction.NEXT;
+			return Optional.ofNullable(PageAction.NEXT);
 		}
 		else if(choice.toUpperCase().equals("PREV") || choice.toUpperCase().equals("PREVIOUS")) {
 			logger.info("user page action : " + PageAction.PREV);
-			return PageAction.PREV;
+			return Optional.ofNullable(PageAction.PREV);
 		}
 		else if(choice.toUpperCase().equals("STOP") || choice.toUpperCase().equals("0")) {
 			logger.info("user page action : " + PageAction.STOP);
-			return PageAction.STOP;
+			return Optional.ofNullable(PageAction.STOP);
 		}
 		
 		logger.info("user page action : wrong choice");
-		return null;
+		return Optional.empty();
 	}
 
 	/**
@@ -406,7 +407,7 @@ public class Launcher {
 	 * 
 	 * @return A valid Date for the new computer (can be null)
 	 */
-	public static Date askIntroducedDate() {
+	public static Optional<Date> askIntroducedDate() {
 		logger.info("ask introduce date (new computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -416,18 +417,18 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("introduce date chosen (new computer) : none");
-			return null;
+			return Optional.empty();
 		}
 			
 
 		try {
 			logger.info("introduce date chosen (new computer) : " + stDate);
-			return new Date(dateFormat.parse(stDate).getTime());
+			return Optional.ofNullable(new Date(dateFormat.parse(stDate).getTime()));
 
 		}catch(ParseException e) {
 			logger.info("introduce date chosen (new computer) : invalid entry");
 			System.out.println("INVALID DATE");
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -437,7 +438,7 @@ public class Launcher {
 	 * @param currentDate The introduced date of the computer the user is updating
 	 * @return A valid Date for the computer (can be null)
 	 */
-	public static Date askNewIntroducedDate(Date currentDate) {
+	public static Optional<Date> askNewIntroducedDate(Date currentDate) {
 		logger.info("ask introduce date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -447,18 +448,18 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("introduce date chosen (update computer) : none");
-			return currentDate;
+			return Optional.of(currentDate);
 		}
 			
 
 		try {
 			logger.info("introduce date chosen (update computer) : " + stDate);
-			return new Date(dateFormat.parse(stDate).getTime());
+			return Optional.of(new Date(dateFormat.parse(stDate).getTime()));
 
 		}catch(ParseException e) {
 			logger.info("introduce date chosen (update computer) : invalid entry");
 			System.out.println("INVALID DATE");
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -468,7 +469,7 @@ public class Launcher {
 	 * @return A valid discontinued date for the new computer (can be null | Warning : can be prior to the introduced date)
 	 */
 	//TODO verifier que la date est bien posterieur a celle d'introduction
-	public static Date askDiscontinuedDate() {
+	public static Optional<Date> askDiscontinuedDate() {
 		logger.info("ask discontinue date (new computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -478,18 +479,18 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("discontue date chosen (new computer) : none");
-			return null;
+			return Optional.empty();
 		}
 			
 
 		try {
 			logger.info("discontinue date chosen (new computer) : " + stDate);
-			return new Date(dateFormat.parse(stDate).getTime());
+			return Optional.of(new Date(dateFormat.parse(stDate).getTime()));
 
 		}catch(ParseException e) {
 			logger.info("discontinue date chosen (new computer) : invalid entry");
 			System.out.println("INVALID DATE");
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -499,7 +500,7 @@ public class Launcher {
 	 * @param currentDate The discontinued date of the computer the user is updating
 	 * @return A valid discontinued date for the computer (can be null | Warning : can be prior to the introduced date)
 	 */
-	public static Date askNewDiscontinuedDate(Date currentDate) {
+	public static Optional<Date> askNewDiscontinuedDate(Date currentDate) {
 		logger.info("ask discontinue date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -509,17 +510,17 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("discontinue date chosen (update computer) : none");
-			return currentDate;
+			return Optional.of(currentDate);
 		}
 
 		try {
 			logger.info("discontinue date chosen (update computer) : " + stDate);
-			return new Date(dateFormat.parse(stDate).getTime());
+			return Optional.of(new Date(dateFormat.parse(stDate).getTime()));
 
 		}catch(ParseException e) {
 			logger.info("discontinue date chosen (update computer) : invalid entry");
 			System.out.println("INVALID DATE");
-			return null;
+			return Optional.empty();
 		}
 	}
 
