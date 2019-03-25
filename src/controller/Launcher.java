@@ -126,7 +126,7 @@ public class Launcher {
 			nName = cpuToUpdate.getName();
 
 		//Company id
-		Long nCompany = askNewCompanyId(cpuToUpdate.getManufacturerId());
+		Long nCompany = askNewCompanyId(cpuToUpdate.getCompanyId());
 
 		//Introduced date
 		Optional<Date> nIntroDate = askNewIntroducedDate(cpuToUpdate.getIntroducedDate());

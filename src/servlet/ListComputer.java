@@ -20,7 +20,7 @@ import model.Computer;
 public class ListComputer extends HttpServlet {
 	
 	private static final String VIEW_LIST_COMPUTER = "/WEB-INF/views/dashboard.jsp";
-	private static final String LIST_COMPUTERS = "computers";
+	private static final String ATT_LIST_COMPUTERS = "computers";
 	
 	private static final long serialVersionUID = 1L;
 	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
@@ -37,7 +37,7 @@ public class ListComputer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Computer> listComputers = computerDao.findAll();
-		request.setAttribute(LIST_COMPUTERS, listComputers);
+		request.setAttribute(ATT_LIST_COMPUTERS, listComputers);
 		
 		this.getServletContext().getRequestDispatcher(VIEW_LIST_COMPUTER).forward(request, response);
 	}

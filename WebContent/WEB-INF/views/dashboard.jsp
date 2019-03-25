@@ -71,10 +71,10 @@
 						<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
 							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">${cpu.name}</a></td>
+						<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
 						<td>${ cpu.introducedDate}</td>
 						<td>${ cpu.discontinuedDate}</td>
-						<td>${ cpu.manufacturerId }</td>
+						<td>${ cpu.companyId }</td>
 
 					</tr>
 					</c:forEach>
@@ -107,9 +107,9 @@
 		</div>
 
 	</footer>
-	<script src="/WEB-INF/js/jquery.min.js"></script>
-	<script src="/WEB-INF/js/bootstrap.min.js"></script>
-	<script src="/WEB-INF/js/dashboard.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/dashboard.js"></script>
 
 </body>
 </html>

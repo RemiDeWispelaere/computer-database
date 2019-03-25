@@ -5,14 +5,13 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
 
 import dao.CompanyDao;
 import dao.ComputerDao;
@@ -21,41 +20,39 @@ import model.Company;
 import model.Computer;
 
 /**
- * Servlet implementation class AddComputerServlet
+ * Servlet implementation class EditComputer
  */
-@WebServlet("/AddComputer")
-public class AddComputer extends HttpServlet {
+@WebServlet("/EditComputer")
+public class EditComputer extends HttpServlet {
 	
-	private static final String VIEW_FORM_ADD_COMPUTER = "/WEB-INF/views/addComputer.jsp";
+	private static final String VIEW_EDIT_COMPUTER = "/WEB-INF/views/editComputer.jsp";
 	private static final String VIEW_RETURN = "ListComputer";
+	private static final String PARAM_COMPUTER_ID = "computerId";
+	private static final String ATT_COMPUTER = "computer";
 	private static final String ATT_LIST_COMPANIES = "companies";
-	private static final long serialVersionUID = 1L;
+	
 	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
 	private static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
-	private static final Logger logger = Logger.getLogger(AddComputer.class);
-	
-	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AddComputer() {
-		super();
-		logger.info("CONSTR");
-	}
-	
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		logger.info("INIT");
-	}
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public EditComputer() {
+        super();
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int computerId = Integer.valueOf(request.getParameter(PARAM_COMPUTER_ID));
+		Optional<Computer> computer = computerDao.findById(computerId);
 		List<Company> companies = companyDao.findAll();
+		
+		request.setAttribute(ATT_COMPUTER, computer.orElse(null));	
 		request.setAttribute(ATT_LIST_COMPANIES, companies);
-		this.getServletContext().getRequestDispatcher(VIEW_FORM_ADD_COMPUTER).forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_EDIT_COMPUTER).forward(request, response);
 	}
 
 	/**
@@ -64,6 +61,7 @@ public class AddComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+		int computerId = Integer.valueOf(request.getParameter("computerId"));
 		String computerName = request.getParameter("computerName");
 		String stIntroducedDate = request.getParameter("introduced");
 		String stDiscontinuedDate = request.getParameter("discontinued");
@@ -86,17 +84,15 @@ public class AddComputer extends HttpServlet {
 		Long companyId = Long.valueOf(stCompanyId);
 
 		Computer computer = new Computer.ComputerBuilder()
+				.withId(computerId)
 				.withName(computerName)
 				.withCompanyId(companyId)
 				.withIntroducedDate(introducedDate)
 				.withDiscontinuedDate(discontinuedDate)
 				.build();
-		computerDao.add(computer).orElseThrow(RuntimeException::new);
+		computerDao.update(computer);
 		
 		response.sendRedirect(VIEW_RETURN);
-		
-//		int newCpuId = computerDao.add(computer).orElseThrow(RuntimeException::new);
-//		this.getServletContext().getRequestDispatcher("/WEBINF/views/computer" + newCpuId + ".jsp");
 	}
 
 }

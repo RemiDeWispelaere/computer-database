@@ -44,7 +44,7 @@ public class ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
-					computer.getManufacturerId(), computer.getIntroducedDate(), computer.getDiscontinuedDate());
+					computer.getCompanyId(), computer.getIntroducedDate(), computer.getDiscontinuedDate());
 			logger.info("accès à la base de données : " + preparedStatement);
 			int statut = preparedStatement.executeUpdate();
 
@@ -182,7 +182,7 @@ public class ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, true, cpu.getName(),
-					cpu.getManufacturerId(), cpu.getIntroducedDate(), cpu.getDiscontinuedDate(), cpu.getId());
+					cpu.getCompanyId(), cpu.getIntroducedDate(), cpu.getDiscontinuedDate(), cpu.getId());
 			logger.info("accès à la base de données : " + preparedStatement);
 			statut = preparedStatement.executeUpdate();
 
@@ -233,7 +233,7 @@ public class ComputerDao {
 
 		computer.setId(resultSet.getInt("id"));
 		computer.setName(resultSet.getString("name"));
-		computer.setManufacturerId((Long) resultSet.getObject("company_id"));
+		computer.setCompanyId((Long) resultSet.getObject("company_id"));
 		computer.setIntroducedDate(resultSet.getDate("introduced"));
 		computer.setDiscontinuedDate(resultSet.getDate("discontinued"));
 

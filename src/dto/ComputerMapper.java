@@ -16,7 +16,7 @@ public class ComputerMapper {
 		ComputerDto dto = new ComputerDto.ComputerDtoBuilder()
 				.withId(cpu.getId())
 				.withName(cpu.getName())
-				.withCompanyId(cpu.getManufacturerId())
+				.withCompanyId(cpu.getCompanyId())
 				.withIntroducedDate(cpu.getIntroducedDate().toString())
 				.withDiscontinuedDate(cpu.getDiscontinuedDate().toString())
 				.build();
