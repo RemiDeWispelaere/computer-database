@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class ComputerDao {
 
 	//////// QUERIES////////
 
-	public void add(Computer computer) throws DAOException {
+	public Optional<Integer> add(Computer computer) throws DAOException {
 
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
@@ -65,6 +66,7 @@ public class ComputerDao {
 			fermeturesSilencieuses(valeurAutoGenerees, preparedStatement, connexion);
 		}
 
+		return Optional.ofNullable(computer.getId());
 	}
 
 	public List<Computer> findAll() throws DAOException {
@@ -117,7 +119,7 @@ public class ComputerDao {
 		return computers;
 	}
 
-	public Computer findById(int id) throws DAOException {
+	public Optional<Computer> findById(int id) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -131,6 +133,7 @@ public class ComputerDao {
 
 			if (resultSet.next()) {
 				computer = map(resultSet);
+				
 			} else
 				System.out.println("\n This computer does not exist");
 
@@ -141,10 +144,10 @@ public class ComputerDao {
 			;
 		}
 
-		return computer;
+		return Optional.ofNullable(computer);
 	}
 
-	public Computer findByName(String name) throws DAOException {
+	public Optional<Computer> findByName(String name) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -168,7 +171,7 @@ public class ComputerDao {
 			;
 		}
 
-		return computer;
+		return Optional.ofNullable(computer);
 	}
 
 	public boolean update(Computer cpu) throws DAOException {

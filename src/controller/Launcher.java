@@ -174,11 +174,15 @@ public class Launcher {
 			System.out.print("ENTER THE ID : ");
 			try {
 				int id = Integer.valueOf(scanner.nextLine());
+				Optional<Computer> cpuOpt = computerDao.findById(id);
+				Computer cpu = null;
+				
+				if(cpuOpt.isPresent()) {
+					cpu = cpuOpt.get();
+					System.out.println(cpu);
+				}
 
-				Computer cpu = computerDao.findById(id);
-				System.out.println(cpu);
-
-				return Optional.of(cpu);
+				return Optional.ofNullable(cpu);
 			}catch(NumberFormatException e) {
 				System.out.println("INVALID ID (integer only)");
 			}
@@ -187,10 +191,15 @@ public class Launcher {
 			System.out.print("ENTER THE NAME : ");
 			String name = scanner.nextLine();
 
-			Computer cpu = computerDao.findByName(name);
-			System.out.println(cpu);
+			Optional<Computer> cpuOpt = computerDao.findByName(name);
+			Computer cpu = null;
+			
+			if(cpuOpt.isPresent()) {
+				cpu = cpuOpt.get();
+				System.out.println(cpu);
+			}
 
-			return Optional.of(cpu);
+			return Optional.ofNullable(cpu);
 		default:
 			//
 		}
