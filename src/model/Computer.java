@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.Optional;
 
 /**
  * The representation of a computer in the DB
@@ -99,8 +100,8 @@ public class Computer {
 	 * 
 	 * @return The current computer's introduced date
 	 */
-	public Date getIntroducedDate() {
-		return this.introducedDate;
+	public Optional<Date> getIntroducedDate() {
+		return Optional.ofNullable(this.introducedDate);
 	}
 
 	//DATE DISCONTINUED
@@ -118,8 +119,8 @@ public class Computer {
 	 * 
 	 * @return The current computer's discontinued date
 	 */
-	public Date getDiscontinuedDate() {
-		return this.discontinuedDate;
+	public Optional<Date> getDiscontinuedDate() {
+		return Optional.ofNullable(this.discontinuedDate);
 	}
 
 	////////TO STRING////////

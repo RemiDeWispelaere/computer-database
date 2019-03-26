@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.ComputerDao;
 import dao.DAOFactory;
+import dto.ComputerDto;
 import model.Computer;
 import model.PageManager;
+import service.ComputerService;
 
 /**
  * Servlet implementation class ListComputer
@@ -25,7 +27,7 @@ public class ListComputer extends HttpServlet {
 	private static final String ATT_PAGE_MANAGER = "pageManager";
 	
 	private static final long serialVersionUID = 1L;
-	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
+	private static final ComputerService computerService = new ComputerService();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -49,8 +51,8 @@ public class ListComputer extends HttpServlet {
 		}
 		
 		
-		List<Computer> listComputers = computerDao.findAll();
-		PageManager<Computer> pageManager = new PageManager<>(listComputers);
+		List<ComputerDto> listComputers = computerService.getAllComputers();
+		PageManager<ComputerDto> pageManager = new PageManager<>(listComputers);
 		pageManager.setIndex(startIndex);
 		
 		request.setAttribute(ATT_PAGE_MANAGER, pageManager);

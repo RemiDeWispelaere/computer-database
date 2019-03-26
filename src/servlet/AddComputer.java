@@ -19,6 +19,7 @@ import dao.ComputerDao;
 import dao.DAOFactory;
 import model.Company;
 import model.Computer;
+import service.ComputerService;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -29,9 +30,11 @@ public class AddComputer extends HttpServlet {
 	private static final String VIEW_FORM_ADD_COMPUTER = "/WEB-INF/views/addComputer.jsp";
 	private static final String VIEW_RETURN = "ListComputer";
 	private static final String ATT_LIST_COMPANIES = "companies";
+	
 	private static final long serialVersionUID = 1L;
-	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
+	
 	private static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
+	private static final ComputerService computerService = new ComputerService();
 	private static final Logger logger = Logger.getLogger(AddComputer.class);
 	
 	
@@ -62,41 +65,9 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-		String computerName = request.getParameter("computerName");
-		String stIntroducedDate = request.getParameter("introduced");
-		String stDiscontinuedDate = request.getParameter("discontinued");
-		String stCompanyId = request.getParameter("companyId");
-
-		Date introducedDate = null;	
-		try{
-			introducedDate = new Date(dateFormat.parse(stIntroducedDate).getTime());
-		}catch(ParseException e) {
-			System.out.println(e.getMessage());
-		}
-
-		Date discontinuedDate = null;	
-		try{
-			discontinuedDate = new Date(dateFormat.parse(stDiscontinuedDate).getTime());
-		}catch(ParseException e) {
-			System.out.println(e.getMessage());
-		}
-
-		Long companyId = Long.valueOf(stCompanyId);
-
-		Computer computer = new Computer.ComputerBuilder()
-				.withName(computerName)
-				.withCompanyId(companyId)
-				.withIntroducedDate(introducedDate)
-				.withDiscontinuedDate(discontinuedDate)
-				.build();
-		computerDao.add(computer).orElseThrow(RuntimeException::new);
+		computerService.addComputer(request);
 		
-		response.sendRedirect(VIEW_RETURN);
-		
-//		int newCpuId = computerDao.add(computer).orElseThrow(RuntimeException::new);
-//		this.getServletContext().getRequestDispatcher("/WEBINF/views/computer" + newCpuId + ".jsp");
+		response.sendRedirect(VIEW_RETURN);	
 	}
 
 }

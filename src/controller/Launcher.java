@@ -447,7 +447,7 @@ public class Launcher {
 	 * @param currentDate The introduced date of the computer the user is updating
 	 * @return A valid Date for the computer (can be null)
 	 */
-	public static Optional<Date> askNewIntroducedDate(Date currentDate) {
+	public static Optional<Date> askNewIntroducedDate(Optional<Date> currentDate) {
 		logger.info("ask introduce date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -457,7 +457,7 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("introduce date chosen (update computer) : none");
-			return Optional.of(currentDate);
+			return currentDate;
 		}
 			
 
@@ -509,7 +509,7 @@ public class Launcher {
 	 * @param currentDate The discontinued date of the computer the user is updating
 	 * @return A valid discontinued date for the computer (can be null | Warning : can be prior to the introduced date)
 	 */
-	public static Optional<Date> askNewDiscontinuedDate(Date currentDate) {
+	public static Optional<Date> askNewDiscontinuedDate(Optional<Date> currentDate) {
 		logger.info("ask discontinue date (update computer)");
 		String stDate;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
@@ -519,7 +519,7 @@ public class Launcher {
 
 		if(stDate.isEmpty()) {
 			logger.info("discontinue date chosen (update computer) : none");
-			return Optional.of(currentDate);
+			return currentDate;
 		}
 
 		try {

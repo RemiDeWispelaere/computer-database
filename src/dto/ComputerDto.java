@@ -4,7 +4,7 @@ public class ComputerDto {
 
 	private int id;
 	private String name;
-	private Long manufacturerId;
+	private Long companyId;
 	private String introducedDate;
 	private String discontinuedDate;
 
@@ -15,7 +15,7 @@ public class ComputerDto {
 		this.name = builder.name;
 		this.introducedDate = builder.introducedDate;
 		this.discontinuedDate = builder.discontinuedDate;
-		this.manufacturerId = builder.companyId;
+		this.companyId = builder.companyId;
 	}
 
 	//////////////SETTER | GETTER ///////////////////
@@ -64,8 +64,8 @@ public class ComputerDto {
 	 * 
 	 * @param nManId The new computer's company Id
 	 */
-	public void setManufacturerId(Long nManId) {
-		this.manufacturerId = nManId;
+	public void setCompanyId(Long nManId) {
+		this.companyId = nManId;
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class ComputerDto {
 	 * 
 	 * @return The current computer's company Id
 	 */
-	public Long getManufacturerId() {
-		return this.manufacturerId;
+	public Long getCompanyId() {
+		return this.companyId;
 	}
 
 	//DATE INTRODUCED
@@ -121,7 +121,7 @@ public class ComputerDto {
 		String ret = "\n -Computer-\n" 
 				+ "| id : " + this.getId() + "\n"
 				+ "| name : " + this.getName() + "\n"
-				+ "| company id : " + this.getManufacturerId() + "\n"
+				+ "| company id : " + this.getCompanyId() + "\n"
 				+ "| introduced date : " + this.getIntroducedDate() + "\n"
 				+ "| discontinued date : " + this.getDiscontinuedDate() + "\n"
 				+ "_________________\n";
@@ -172,7 +172,7 @@ public class ComputerDto {
 			computer.setName(this.name);
 			computer.setIntroducedDate(this.introducedDate);
 			computer.setDiscontinuedDate(this.discontinuedDate);
-			computer.setManufacturerId(this.companyId);
+			computer.setCompanyId(this.companyId);
 			return computer;
 		}
 	}
