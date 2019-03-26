@@ -12,14 +12,15 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="ListComputer"> Application -
 				Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computers.size() } computer(s) found</h1>
+			<h1>List of computers</h1>
+			<h3 id="homeTitle">${pageManager.getLength() } computer(s) found</h3>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -67,7 +68,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${computers}" var="cpu">
+					<c:forEach items="${pageManager.getCurrentPage()}" var="cpu">
 						<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
 							class="cb" value="0"></td>
@@ -87,23 +88,13 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
+				<li><a href="?startIndex=${ pageManager.getPreviousPageIndex() }" aria-label="Previous" > <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a style="pointer-events: none; cursor: default;">${pageManager.index }-${pageManager.index + pageManager.rowByPage} </a></li>
+				<li><a href="?startIndex=${ pageManager.getNextPageIndex() }" aria-label="Next" > <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
-		</div>
-
-		<div class="btn-group btn-group-sm pull-right" role="group">
-			<button type="button" class="btn btn-default">10</button>
-			<button type="button" class="btn btn-default">50</button>
-			<button type="button" class="btn btn-default">100</button>
 		</div>
 
 	</footer>

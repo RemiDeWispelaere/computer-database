@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.ComputerDao;
 import dao.DAOFactory;
 import model.Computer;
+import model.PageManager;
 
 /**
  * Servlet implementation class ListComputer
@@ -20,7 +21,8 @@ import model.Computer;
 public class ListComputer extends HttpServlet {
 	
 	private static final String VIEW_LIST_COMPUTER = "/WEB-INF/views/dashboard.jsp";
-	private static final String ATT_LIST_COMPUTERS = "computers";
+	private static final String PARAM_START_INDEX = "startIndex";
+	private static final String ATT_PAGE_MANAGER = "pageManager";
 	
 	private static final long serialVersionUID = 1L;
 	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
@@ -36,8 +38,22 @@ public class ListComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String stStartIndex = request.getParameter(PARAM_START_INDEX);
+		int startIndex;
+		if(stStartIndex == null | stStartIndex == "") {
+			startIndex = 0;
+		}
+		else {
+			startIndex = Integer.valueOf(stStartIndex);
+		}
+		
+		
 		List<Computer> listComputers = computerDao.findAll();
-		request.setAttribute(ATT_LIST_COMPUTERS, listComputers);
+		PageManager<Computer> pageManager = new PageManager<>(listComputers);
+		pageManager.setIndex(startIndex);
+		
+		request.setAttribute(ATT_PAGE_MANAGER, pageManager);
 		
 		this.getServletContext().getRequestDispatcher(VIEW_LIST_COMPUTER).forward(request, response);
 	}

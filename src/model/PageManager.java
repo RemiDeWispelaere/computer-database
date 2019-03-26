@@ -25,6 +25,11 @@ public class PageManager<T> {
 
 	////////SETTER | GETTER////////
 
+	//ROW_BY_PAGE
+	public int getRowByPage() {
+		return this.ROW_BY_PAGE;
+	}
+	
 	//datas
 	public void setDatas(List<T> nDatas) {
 		this.datas = nDatas;
@@ -36,7 +41,7 @@ public class PageManager<T> {
 	}
 
 	//index
-	public void setDatas(int nIndex) {
+	public void setIndex(int nIndex) {
 		this.index = nIndex;
 	}
 
@@ -57,12 +62,18 @@ public class PageManager<T> {
 	
 	////////ACTIONS////////
 	
+	public int getNextPageIndex() {
+		return Math.min(this.index + this.ROW_BY_PAGE, this.length);
+	}
 	public void next() {
-		this.index = Math.min(this.index + this.ROW_BY_PAGE, this.length);
+		this.index = this.getNextPageIndex();
 	}
 	
+	public int getPreviousPageIndex() {
+		return Math.max(this.index - this.ROW_BY_PAGE, 0);
+	}
 	public void previous() {
-		this.index = Math.max(this.index - this.ROW_BY_PAGE, 0);
+		this.index = this.getPreviousPageIndex();
 	}
 	
 	public List<T> getCurrentPage(){
