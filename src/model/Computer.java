@@ -130,8 +130,8 @@ public class Computer {
 				+ "| id : " + this.getId() + "\n"
 				+ "| name : " + this.getName() + "\n"
 				+ "| company id : " + this.getCompanyId() + "\n"
-				+ "| introduced date : " + this.getIntroducedDate() + "\n"
-				+ "| discontinued date : " + this.getDiscontinuedDate() + "\n"
+				+ "| introduced date : " + this.getIntroducedDate().orElse(null) + "\n"
+				+ "| discontinued date : " + this.getDiscontinuedDate().orElse(null) + "\n"
 				+ "_________________\n";
 
 		return ret;

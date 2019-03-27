@@ -73,8 +73,8 @@
 						<td class="editMode"><input type="checkbox" name="cb"
 							class="cb" value="0"></td>
 						<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
-						<td>${ cpu.introducedDate}</td>
-						<td>${ cpu.discontinuedDate}</td>
+						<td>${ cpu.introducedDate.toString().substring(9, 19)}</td><!-- substring pour clean l'affichage du optional -->
+						<td>${ cpu.discontinuedDate.toString().substring(9, 19)}</td>
 						<td>${ cpu.companyId }</td>
 
 					</tr>
