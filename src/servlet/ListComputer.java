@@ -9,10 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.ComputerDao;
-import dao.DAOFactory;
 import dto.ComputerDto;
-import model.Computer;
 import model.PageManager;
 import service.ComputerService;
 

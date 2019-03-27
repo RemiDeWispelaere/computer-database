@@ -11,7 +11,6 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dto.ComputerDto;
 import dto.ComputerMapper;
-import model.Computer;
 
 public class ComputerService {
 

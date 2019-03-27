@@ -3,7 +3,9 @@ package dao;
 public class DAOConfigurationException extends RuntimeException {
 
 	////////CONSTRUCTORS////////
-	
+
+	private static final long serialVersionUID = 1L;
+
 	public DAOConfigurationException( String message ) {
         super( message );
     }

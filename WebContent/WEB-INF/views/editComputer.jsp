@@ -24,23 +24,27 @@
 					<h1>Edit Computer</h1>
 
 					<form action="EditComputer" method="POST">
-						<input type="hidden" value="${computer.id }" id="id" name="computerId" />
+						<input type="hidden" value="${computer.id }" id="id"
+							name="computerId" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> 
-								<input type="text" class="form-control" id="computerName" name="computerName" value="${computer.name }">
+								<label for="computerName">Computer name</label> <input
+									type="text" class="form-control" id="computerName"
+									name="computerName" value="${computer.name }" required>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> 
-								<input type="date" class="form-control" id="introduced" name="introduced" value="${computer.introducedDate }">
+								<label for="introduced">Introduced date</label> <input
+									type="date" class="form-control" id="introduced"
+									name="introduced" value="${computer.introducedDate.toString().substring(9, 19) }">><!-- substring pour clean l'affichage du optional -->
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> 
-								<input type="date" class="form-control" id="discontinued" name="discontinued" value="${computer.discontinuedDate }">
+								<label for="discontinued">Discontinued date</label> <input
+									type="date" class="form-control" id="discontinued"
+									name="discontinued" value="${computer.discontinuedDate.toString().substring(9, 19) }">
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> 
-								<select	class="form-control" id="companyId" name="companyId">
+								<label for="companyId">Company</label> <select
+									class="form-control" id="companyId" name="companyId">
 									<c:forEach items="${ companies }" var="company">
 										<c:choose>
 											<c:when test="${company.id == computer.companyId }">
@@ -66,5 +70,9 @@
 			</div>
 		</div>
 	</section>
+	<script src="js/jquery.min.js"></script>
+	<script
+		src="//cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.js"></script>
+	<script src="js/formValidation.js"></script>
 </body>
 </html>
