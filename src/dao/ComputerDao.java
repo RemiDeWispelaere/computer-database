@@ -44,7 +44,7 @@ public class ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
-					computer.getCompanyId(), computer.getIntroducedDate(), computer.getDiscontinuedDate());
+					computer.getCompanyId(), computer.getIntroducedDate().orElse(null), computer.getDiscontinuedDate().orElse(null));
 			logger.info("accès à la base de données : " + preparedStatement);
 			int statut = preparedStatement.executeUpdate();
 
@@ -182,7 +182,7 @@ public class ComputerDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, true, cpu.getName(),
-					cpu.getCompanyId(), cpu.getIntroducedDate(), cpu.getDiscontinuedDate(), cpu.getId());
+					cpu.getCompanyId(), cpu.getIntroducedDate().orElse(null), cpu.getDiscontinuedDate().orElse(null), cpu.getId());
 			logger.info("accès à la base de données : " + preparedStatement);
 			statut = preparedStatement.executeUpdate();
 

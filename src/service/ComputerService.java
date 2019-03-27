@@ -2,6 +2,7 @@ package service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,9 +11,16 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dto.ComputerDto;
 import dto.ComputerMapper;
+import model.Computer;
 
 public class ComputerService {
 
+	private static final String PARAM_COMPUTER_ID = "computerId";
+	private static final String PARAM_COMPUTER_NAME = "computerName";
+	private static final String PARAM_COMPUTER_INTRODUCED = "introduced";
+	private static final String PARAM_COMPUTER_DISCONTINUED = "discontinued";
+	private static final String PARAM_COMPANY_ID = "companyId";
+	
 	private static final ComputerMapper mapper = new ComputerMapper();
 	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
 	
@@ -24,14 +32,18 @@ public class ComputerService {
 		return mapper.parseToDtosList(computerDao.findAll());
 	}
 	
+	public Optional<ComputerDto> getComputerById(HttpServletRequest request){
+		int computerId = Integer.valueOf(request.getParameter(PARAM_COMPUTER_ID));
+		
+		return computerDao.findById(computerId).map(mapper::parseToDto);
+	}
+	
 	public void addComputer(HttpServletRequest request) {
 		
 		String computerName = request.getParameter("computerName");
 		String stIntroducedDate = request.getParameter("introduced");
 		String stDiscontinuedDate = request.getParameter("discontinued");
-		String stCompanyId = request.getParameter("companyId");
-		
-		Long companyId = Long.valueOf(stCompanyId);
+		Long companyId = Long.valueOf(request.getParameter("companyId"));
 		
 		ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
 				.withName(computerName)
@@ -49,5 +61,29 @@ public class ComputerService {
 		}
 	}
 	
-	//public ComputerDto editComputer()
+	public void updateComputer(HttpServletRequest request) {
+		
+		int computerId = Integer.valueOf(request.getParameter(PARAM_COMPUTER_ID));
+		String computerName = request.getParameter(PARAM_COMPUTER_NAME);
+		String stIntroducedDate = request.getParameter(PARAM_COMPUTER_INTRODUCED);
+		String stDiscontinuedDate = request.getParameter(PARAM_COMPUTER_DISCONTINUED);
+		Long companyId = Long.valueOf(request.getParameter(PARAM_COMPANY_ID));
+
+		ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
+				.withId(computerId)
+				.withName(computerName)
+				.withCompanyId(companyId)
+				.withIntroducedDate(stIntroducedDate)
+				.withDiscontinuedDate(stDiscontinuedDate)
+				.build();
+		
+		try {
+			computerDao.update(mapper.parseToComputer(computerDto));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -19,22 +19,34 @@ public class ComputerMapper {
 				.withId(cpu.getId())
 				.withName(cpu.getName())
 				.withCompanyId(cpu.getCompanyId())
-				.withIntroducedDate(cpu.getIntroducedDate().toString())
-				.withDiscontinuedDate(cpu.getDiscontinuedDate().toString())
 				.build();
+		
+		if(cpu.getIntroducedDate().isPresent()) {
+			dto.setIntroducedDate(cpu.getIntroducedDate().toString());
+		}
+		
+		if(cpu.getDiscontinuedDate().isPresent()) {
+			dto.setDiscontinuedDate(cpu.getDiscontinuedDate().toString());
+		}
 
 		return dto;
 	}
 
 	public Computer  parseToComputer(ComputerDto dto) throws ParseException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Computer cpu = new Computer.ComputerBuilder()
 				.withId(dto.getId())
 				.withName(dto.getName())
 				.withCompanyId(dto.getCompanyId())
-				.withIntroducedDate(new Date(dateFormat.parse(dto.getIntroducedDate()).getTime()))
-				.withDiscontinuedDate(new Date(dateFormat.parse(dto.getDiscontinuedDate()).getTime()))
 				.build();
+		
+		if(!dto.getIntroducedDate().equals("")) {
+			cpu.setIntroducedDate(new Date(dateFormat.parse(dto.getIntroducedDate()).getTime()));
+		}
+		
+		if(!dto.getDiscontinuedDate().equals("")) {
+			cpu.setDiscontinuedDate(new Date(dateFormat.parse(dto.getDiscontinuedDate()).getTime()));
+		}
 
 		return cpu;
 	}

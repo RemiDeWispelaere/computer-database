@@ -1,9 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,11 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import dao.CompanyDao;
-import dao.ComputerDao;
-import dao.DAOFactory;
-import model.Company;
-import model.Computer;
+import dto.CompanyDto;
+import service.CompanyService;
 import service.ComputerService;
 
 /**
@@ -33,7 +27,7 @@ public class AddComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
+	private static final CompanyService companyService = new CompanyService();
 	private static final ComputerService computerService = new ComputerService();
 	private static final Logger logger = Logger.getLogger(AddComputer.class);
 	
@@ -56,7 +50,7 @@ public class AddComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Company> companies = companyDao.findAll();
+		List<CompanyDto> companies = companyService.getAllCompanies();
 		request.setAttribute(ATT_LIST_COMPANIES, companies);
 		this.getServletContext().getRequestDispatcher(VIEW_FORM_ADD_COMPUTER).forward(request, response);
 	}
