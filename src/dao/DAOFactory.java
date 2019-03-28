@@ -3,72 +3,73 @@ package dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public class DAOFactory {
 
-    private static final String FICHIER_PROPERTIES       = "dao.properties";
+	private static final String FICHIER_PROPERTIES       = "dao.properties";
+	
+	private HikariDataSource hikariDb;
 
-    private String              url;
-    private String              username;
-    private String              password;
+	public DAOFactory(HikariDataSource db) {
+		super();
+		this.hikariDb = db;
+	}
 
-    DAOFactory( String url, String username, String password ) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-    }
+	/*
+	 * Méthode chargée de récupérer les informations de connexion à la base de
+	 * données, charger le driver JDBC et retourner une instance de la Factory
+	 */
+	public static DAOFactory getInstance() throws DAOConfigurationException {
 
-    /*
-     * Méthode chargée de récupérer les informations de connexion à la base de
-     * données, charger le driver JDBC et retourner une instance de la Factory
-     */
-    public static DAOFactory getInstance() throws DAOConfigurationException {
-        Properties properties = new Properties();
-        String url;
-        String driver;
-        String nomUtilisateur;
-        String motDePasse;
+		Properties properties = new Properties();
+		String url;
+		String nomUtilisateur;
+		String motDePasse;
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
 
-        if ( fichierProperties == null ) {
-            throw new DAOConfigurationException( "Le fichier properties " + FICHIER_PROPERTIES + " est introuvable." );
-        }
+		if ( fichierProperties == null ) {
+			throw new DAOConfigurationException( "Le fichier properties " + FICHIER_PROPERTIES + " est introuvable." );
+		}
 
-        try {
-            properties.load( fichierProperties );
-            url = properties.getProperty("url");
-            driver = properties.getProperty("driver");
-            nomUtilisateur = properties.getProperty("nomUtilisateur");
-            motDePasse = properties.getProperty("motDePasse");
-        } catch ( IOException e ) {
-            throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
-        }
-        
-        try {
-            Class.forName( driver );
-        } catch ( ClassNotFoundException e ) {
-            throw new DAOConfigurationException( "Le driver est introuvable dans le classpath.", e );
-        }
+		try {
+			properties.load( fichierProperties );
+			url = properties.getProperty("url");
+			nomUtilisateur = properties.getProperty("nomUtilisateur");
+			motDePasse = properties.getProperty("motDePasse");
+		} catch ( IOException e ) {
+			throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
+		}
 
-        DAOFactory instance = new DAOFactory( url, nomUtilisateur, motDePasse );
-        return instance;
-    }
+		try {
+			Class.forName( properties.getProperty("driver"));
+		} catch ( ClassNotFoundException e ) {
+			throw new DAOConfigurationException( "Le driver est introuvable dans le classpath.", e );
+		}
 
-    /* Méthode chargée de fournir une connexion à la base de données */
-     /* package */ Connection getConnection() throws SQLException {
-        return DriverManager.getConnection( url, username, password );
-    }
-     
-    public ComputerDao getComputerDao() {
-        return new ComputerDao( this );
-    }
-    
-    public CompanyDao getCompanyDao() {
-    	return new CompanyDao(this);
-    }
+		HikariConfig hikariConfig = new HikariConfig();
+		hikariConfig.setJdbcUrl(url);
+		hikariConfig.setUsername(nomUtilisateur);
+		hikariConfig.setPassword(motDePasse);
+
+		return new DAOFactory(new HikariDataSource(hikariConfig));
+	}
+
+	Connection getConnection() throws SQLException {
+		return hikariDb.getConnection();
+	}
+
+	public ComputerDao getComputerDao() {
+		return new ComputerDao( this );
+	}
+
+	public CompanyDao getCompanyDao() {
+		return new CompanyDao(this);
+	}
 }
