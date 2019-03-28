@@ -39,7 +39,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="DeleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -71,7 +71,7 @@
 					<c:forEach items="${pageManager.getCurrentPage()}" var="cpu">
 						<tr>
 						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
+							class="cb" value="${cpu.id }"></td>
 						<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
 						<td>${ cpu.introducedDate.toString().substring(9, 19)}</td><!-- substring pour clean l'affichage du optional -->
 						<td>${ cpu.discontinuedDate.toString().substring(9, 19)}</td>
