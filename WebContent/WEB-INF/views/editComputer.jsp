@@ -23,7 +23,7 @@
 					</div>
 					<h1>Edit Computer</h1>
 
-					<form action="EditComputer" method="POST">
+					<form id="editForm" action="EditComputer" method="POST">
 						<input type="hidden" value="${computer.id }" id="id"
 							name="computerId" />
 						<fieldset>

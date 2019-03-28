@@ -19,3 +19,11 @@ $("#addForm").validate({
 		}
 	}
 });
+
+$("#editForm").validate({
+	rules : {
+		discontinued : {
+			greaterThan: "#introduced"
+		}
+	}
+});
