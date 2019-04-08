@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dto.CompanyDto;
 import dto.ComputerDto;
 import model.PageManager;
+import service.CompanyService;
 import service.ComputerService;
 
 /**
@@ -26,6 +28,7 @@ public class ListComputer extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final ComputerService computerService = new ComputerService();
+	private static final CompanyService companyService = new CompanyService();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -59,6 +62,11 @@ public class ListComputer extends HttpServlet {
 		}
 		else {
 			List<ComputerDto> listComputers = computerService.searchByName(stSearch);
+			List<CompanyDto> listCompanies = companyService.searchByName(stSearch);
+			for(CompanyDto company : listCompanies) {
+				listComputers.addAll(computerService.searchByCompany("" + company.getId()));
+			}
+			
 			PageManager<ComputerDto> pageManager = new PageManager<>(listComputers);
 			pageManager.setIndex(startIndex);
 
