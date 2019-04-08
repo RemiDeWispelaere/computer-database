@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.Comparator;
+
 public class ComputerDto {
 
 	private int id;
@@ -78,7 +80,7 @@ public class ComputerDto {
 	public Long getCompanyId() {
 		return this.companyId;
 	}
-	
+
 	//COMPANY NAME
 	/**
 	 * Set the computer's company name
@@ -136,6 +138,28 @@ public class ComputerDto {
 		return this.discontinuedDate;
 	}
 
+	////////Comparator////////
+
+	public static Comparator<ComputerDto> cpuByNameAsc = new Comparator<ComputerDto>() {
+
+		public int compare(ComputerDto cpu1, ComputerDto cpu2) {
+			String cpuName1 = cpu1.getName();
+			String cpuName2 = cpu2.getName();
+
+			return cpuName1.compareToIgnoreCase(cpuName2);
+		}
+	};
+
+	public static Comparator<ComputerDto> cpuByNameDesc = new Comparator<ComputerDto>() {
+
+		public int compare(ComputerDto cpu1, ComputerDto cpu2) {
+			String cpuName1 = cpu1.getName();
+			String cpuName2 = cpu2.getName();
+
+			return cpuName2.compareToIgnoreCase(cpuName1);
+		}
+	};
+
 	////////TO STRING////////
 
 	public String toString() {
@@ -187,7 +211,7 @@ public class ComputerDto {
 			this.companyId = companyId;
 			return this;
 		}
-		
+
 		public ComputerDtoBuilder withCompanyName(String companyName) {
 			this.companyName = companyName;
 			return this;

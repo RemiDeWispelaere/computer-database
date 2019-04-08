@@ -3,6 +3,7 @@ package service;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +39,11 @@ public class ComputerService {
 
 		return computerDao.findById(computerId).map(mapper::parseToDto);
 	}
-	
+
 	public List<ComputerDto> searchByName(String search){
 		return mapper.parseToDtosList(computerDao.searchByName(search));
 	}
-	
+
 	public List<ComputerDto> searchByCompany(String search){
 		return mapper.parseToDtosList(computerDao.searchByCompany(search));
 	}
@@ -113,6 +114,19 @@ public class ComputerService {
 			System.out.println("Impossible de vérifier les dates. " + e);
 		}
 
+	}
+
+	public List<ComputerDto> sortComputers(List<ComputerDto> list, String sortType){
+
+		switch(sortType) {
+		case "nameAsc":
+			Collections.sort(list, ComputerDto.cpuByNameAsc);
+			break;
+		case "nameDesc":
+			Collections.sort(list, ComputerDto.cpuByNameDesc);
+		}
+
+		return list;
 	}
 
 	public boolean checkId(int id) {

@@ -57,7 +57,16 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
+						<th>Computer name
+						<c:choose>
+						<c:when test="${ sort == 'nameDesc' }">
+							<a class="pull-right" href="?startIndex=${ pageManager.getIndex() }&search=${ search }&sort=nameAsc"><i class="fa fa-sort-desc"></i></a>
+						</c:when>
+						<c:otherwise>
+							<a class="pull-right" href="?startIndex=${ pageManager.getIndex() }&search=${ search }&sort=nameDesc"><i class="fa fa-sort-asc"></i></a>
+						</c:otherwise>
+						</c:choose>
+						</th>
 						<th>Introduced date</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date</th>
@@ -90,12 +99,12 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a
-					href="?startIndex=${ pageManager.getPreviousPageIndex() }&search=${ search }"
+					href="?startIndex=${ pageManager.getPreviousPageIndex() }&search=${ search }&sort=${ sort }"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<li><a style="pointer-events: none; cursor: default;">${pageManager.index }-${pageManager.index + pageManager.rowByPage}
 				</a></li>
-				<li><a href="?startIndex=${ pageManager.getNextPageIndex() }&search=${ search }"
+				<li><a href="?startIndex=${ pageManager.getNextPageIndex() }&search=${ search }&sort=${ sort }"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

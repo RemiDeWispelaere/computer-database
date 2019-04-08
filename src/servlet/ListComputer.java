@@ -24,12 +24,13 @@ public class ListComputer extends HttpServlet {
 	private static final String VIEW_LIST_COMPUTER = "/WEB-INF/views/dashboard.jsp";
 	private static final String PARAM_START_INDEX = "startIndex";
 	private static final String PARAM_SEARCH_VALUE = "search";
+	private static final String PARAM_SORT_TYPE = "sort";
 	private static final String ATT_PAGE_MANAGER = "pageManager";
 
 	private static final long serialVersionUID = 1L;
 	private static final ComputerService computerService = new ComputerService();
 	private static final CompanyService companyService = new CompanyService();
-
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -44,7 +45,10 @@ public class ListComputer extends HttpServlet {
 
 		String stStartIndex = request.getParameter(PARAM_START_INDEX);
 		String stSearch = request.getParameter(PARAM_SEARCH_VALUE);
+		String stSort = request.getParameter(PARAM_SORT_TYPE);
 
+		List<ComputerDto> listComputers;
+		
 		int startIndex;
 		if(stStartIndex == null | stStartIndex == "") {
 			startIndex = 0;
@@ -54,25 +58,26 @@ public class ListComputer extends HttpServlet {
 		}
 
 		if(stSearch == null || stSearch.equals("")) {
-			List<ComputerDto> listComputers = computerService.getAllComputers();
-			PageManager<ComputerDto> pageManager = new PageManager<>(listComputers);
-			pageManager.setIndex(startIndex);
-
-			request.setAttribute(ATT_PAGE_MANAGER, pageManager);			
+			listComputers = computerService.getAllComputers();			
 		}
 		else {
-			List<ComputerDto> listComputers = computerService.searchByName(stSearch);
+			listComputers = computerService.searchByName(stSearch);
 			List<CompanyDto> listCompanies = companyService.searchByName(stSearch);
 			for(CompanyDto company : listCompanies) {
 				listComputers.addAll(computerService.searchByCompany("" + company.getId()));
-			}
-			
-			PageManager<ComputerDto> pageManager = new PageManager<>(listComputers);
-			pageManager.setIndex(startIndex);
-
-			request.setAttribute(ATT_PAGE_MANAGER, pageManager);
-			request.setAttribute(PARAM_SEARCH_VALUE, stSearch);
+			}			
 		}
+		
+		if(stSort != null && !stSort.equals("")) {
+			listComputers = computerService.sortComputers(listComputers, stSort);
+		}
+		
+		PageManager<ComputerDto> pageManager = new PageManager<>(listComputers);
+		pageManager.setIndex(startIndex);
+		
+		request.setAttribute(ATT_PAGE_MANAGER, pageManager);
+		request.setAttribute(PARAM_SEARCH_VALUE, stSearch);
+		request.setAttribute(PARAM_SORT_TYPE, stSort);
 		
 		this.getServletContext().getRequestDispatcher(VIEW_LIST_COMPUTER).forward(request, response);
 	}
@@ -83,5 +88,4 @@ public class ListComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }
