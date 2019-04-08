@@ -6,9 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.CompanyDao;
+import dao.DAOFactory;
+import model.Company;
 import model.Computer;
 
 public class ComputerMapper {
+	
+	public static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
 
 	public ComputerMapper(){
 
@@ -19,6 +24,7 @@ public class ComputerMapper {
 				.withId(cpu.getId())
 				.withName(cpu.getName())
 				.withCompanyId(cpu.getCompanyId())
+				.withCompanyName(companyDao.findById(cpu.getCompanyId()).orElse(new Company(0, "")).getName())
 				.build();
 		
 		if(cpu.getIntroducedDate().isPresent()) {

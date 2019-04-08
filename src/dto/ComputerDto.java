@@ -5,6 +5,7 @@ public class ComputerDto {
 	private int id;
 	private String name;
 	private Long companyId;
+	private String companyName;
 	private String introducedDate;
 	private String discontinuedDate;
 
@@ -16,6 +17,7 @@ public class ComputerDto {
 		this.introducedDate = builder.introducedDate;
 		this.discontinuedDate = builder.discontinuedDate;
 		this.companyId = builder.companyId;
+		this.companyName = builder.companyName;
 	}
 
 	//////////////SETTER | GETTER ///////////////////
@@ -58,7 +60,7 @@ public class ComputerDto {
 		return this.name;
 	}
 
-	//MANUFACTURER ID
+	//COMPANY ID
 	/**
 	 * Set the computer's company Id
 	 * 
@@ -75,6 +77,25 @@ public class ComputerDto {
 	 */
 	public Long getCompanyId() {
 		return this.companyId;
+	}
+	
+	//COMPANY NAME
+	/**
+	 * Set the computer's company name
+	 * 
+	 * @param nManId The new computer's company Id
+	 */
+	public void setCompanyName(String nCompName) {
+		this.companyName = nCompName;
+	}
+
+	/**
+	 * Get the computer's company Id
+	 * 
+	 * @return The current computer's company Id
+	 */
+	public String getCompanyName() {
+		return this.companyName;
 	}
 
 	//DATE INTRODUCED
@@ -121,7 +142,7 @@ public class ComputerDto {
 		String ret = "\n -Computer-\n" 
 				+ "| id : " + this.getId() + "\n"
 				+ "| name : " + this.getName() + "\n"
-				+ "| company id : " + this.getCompanyId() + "\n"
+				+ "| company : " + this.getCompanyName() + "\n"
 				+ "| introduced date : " + this.getIntroducedDate() + "\n"
 				+ "| discontinued date : " + this.getDiscontinuedDate() + "\n"
 				+ "_________________\n";
@@ -136,6 +157,7 @@ public class ComputerDto {
 		private String introducedDate;
 		private String discontinuedDate;
 		private Long companyId;
+		private String companyName;
 
 		public ComputerDtoBuilder() {
 
@@ -160,9 +182,14 @@ public class ComputerDto {
 			this.discontinuedDate = discontinuedDate;
 			return this;
 		}
-		
+
 		public ComputerDtoBuilder withCompanyId(Long companyId) {
 			this.companyId = companyId;
+			return this;
+		}
+		
+		public ComputerDtoBuilder withCompanyName(String companyName) {
+			this.companyName = companyName;
 			return this;
 		}
 
@@ -173,6 +200,7 @@ public class ComputerDto {
 			computer.setIntroducedDate(this.introducedDate);
 			computer.setDiscontinuedDate(this.discontinuedDate);
 			computer.setCompanyId(this.companyId);
+			computer.setCompanyName(this.companyName);
 			return computer;
 		}
 	}

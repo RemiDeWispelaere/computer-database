@@ -10,13 +10,17 @@ import dto.CompanyMapper;
 public class CompanyService {
 
 	private static final CompanyMapper mapper = new CompanyMapper();
-	private static final CompanyDao computerDao = DAOFactory.getInstance().getCompanyDao();
+	private static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
 	
 	public CompanyService() {
 		super();
 	}
 	
 	public List<CompanyDto> getAllCompanies(){
-		return mapper.parseToDtosList(computerDao.findAll());
+		return mapper.parseToDtosList(companyDao.findAll());
+	}
+	
+	public List<CompanyDto> searchByName(String search){
+		return mapper.parseToDtosList(companyDao.searchByName(search));
 	}
 }

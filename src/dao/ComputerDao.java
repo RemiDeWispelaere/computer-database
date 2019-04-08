@@ -18,7 +18,9 @@ public class ComputerDao {
 	private static final String SQL_FIND_ALL = "SELECT id, name, introduced, discontinued, company_id FROM computer";
 	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?";
 	private static final String SQL_FIND_BY_NAME = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE name = ?";
+	private static final String SQL_FIND_BY_COMPANY = "SELECT id, name, introduced, discontinued, company FROM computer WHERE companyId = ?";
 	private static final String SQL_FIND_BY_ID = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
+	private static final String SQL_SEARCH_BY_NAME = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE name LIKE ?";
 	private static final String SQL_INSERT = "INSERT INTO computer (name, company_id, introduced, discontinued) VALUES (?, ?, ?, ?)";
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, company_id=?, introduced=?, discontinued=? WHERE id = ?";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
@@ -133,7 +135,7 @@ public class ComputerDao {
 
 			if (resultSet.next()) {
 				computer = map(resultSet);
-				
+
 			} else
 				System.out.println("\n This computer does not exist");
 
@@ -172,6 +174,54 @@ public class ComputerDao {
 		}
 
 		return Optional.ofNullable(computer);
+	}
+
+	public List<Computer> searchByName(String search) throws DAOException {
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		List<Computer> computers = new ArrayList<Computer>();
+
+		try {
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
+			logger.info("accès à la base de données : " + preparedStatement);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				computers.add(map(resultSet));
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+		}
+
+		return computers;
+	}
+	
+	public List<Computer> searchByCompany(String search) throws DAOException {
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		List<Computer> computers = new ArrayList<Computer>();
+
+		try {
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_BY_COMPANY, false, search);
+			logger.info("accès à la base de données : " + preparedStatement);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				computers.add(map(resultSet));
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+		}
+
+		return computers;
 	}
 
 	public boolean update(Computer cpu) throws DAOException {

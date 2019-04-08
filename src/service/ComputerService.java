@@ -38,6 +38,14 @@ public class ComputerService {
 
 		return computerDao.findById(computerId).map(mapper::parseToDto);
 	}
+	
+	public List<ComputerDto> searchByName(String search){
+		return mapper.parseToDtosList(computerDao.searchByName(search));
+	}
+	
+	public List<ComputerDto> searchByCompany(String search){
+		return mapper.parseToDtosList(computerDao.searchByCompany(search));
+	}
 
 	public void addComputer(HttpServletRequest request) {
 

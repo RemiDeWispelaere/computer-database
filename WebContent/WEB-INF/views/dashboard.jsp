@@ -23,11 +23,11 @@
 			<h3 id="homeTitle">${pageManager.getLength() } computer(s) found</h3>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="ListComputer" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="Search name" /> 
+						<input type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
 				</div>
@@ -70,14 +70,15 @@
 				<tbody id="results">
 					<c:forEach items="${pageManager.getCurrentPage()}" var="cpu">
 						<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="${cpu.id }"></td>
-						<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
-						<td>${ cpu.introducedDate.toString().substring(9, 19)}</td><!-- substring pour clean l'affichage du optional -->
-						<td>${ cpu.discontinuedDate.toString().substring(9, 19)}</td>
-						<td>${ cpu.companyId }</td>
+							<td class="editMode"><input type="checkbox" name="cb"
+								class="cb" value="${cpu.id }"></td>
+							<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
+							<td>${ cpu.introducedDate.toString().substring(9, 19)}</td>
+							<!-- substring pour clean l'affichage du optional -->
+							<td>${ cpu.discontinuedDate.toString().substring(9, 19)}</td>
+							<td>${ cpu.companyName }</td>
 
-					</tr>
+						</tr>
 					</c:forEach>
 
 				</tbody>
@@ -88,11 +89,14 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?startIndex=${ pageManager.getPreviousPageIndex() }" aria-label="Previous" > <span
-						aria-hidden="true">&laquo;</span>
+				<li><a
+					href="?startIndex=${ pageManager.getPreviousPageIndex() }&search=${ search }"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a style="pointer-events: none; cursor: default;">${pageManager.index }-${pageManager.index + pageManager.rowByPage} </a></li>
-				<li><a href="?startIndex=${ pageManager.getNextPageIndex() }" aria-label="Next" > <span aria-hidden="true">&raquo;</span>
+				<li><a style="pointer-events: none; cursor: default;">${pageManager.index }-${pageManager.index + pageManager.rowByPage}
+				</a></li>
+				<li><a href="?startIndex=${ pageManager.getNextPageIndex() }&search=${ search }"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 		</div>
