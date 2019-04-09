@@ -171,7 +171,7 @@ public class Launcher {
 		int choice2 = askChoice(2);
 		
 		if(choice2 == 1)
-			companyDao.deleteCompanyt(companyToDelete);
+			companyDao.deleteCompany(companyToDelete);
 	}
 	
 	/**

@@ -11,12 +11,10 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 
 import model.Computer;
-import static dao.DAOUtilitaire.*;
 
-public class ComputerDao {
+public class ComputerDao implements DAOUtilitaire{
 
 	private static final String SQL_FIND_ALL = "SELECT id, name, introduced, discontinued, company_id FROM computer";
-	private static final String SQL_FIND_ALL_WITH_LIMIT = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?";
 	private static final String SQL_FIND_BY_NAME = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE name = ?";
 	private static final String SQL_FIND_BY_COMPANY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE company_id = ?";
 	private static final String SQL_FIND_BY_ID = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
@@ -45,27 +43,44 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
+			preparedStatement = initPreparedStatement(connexion, SQL_INSERT, true, computer.getName(),
 					computer.getCompanyId(), computer.getIntroducedDate().orElse(null), computer.getDiscontinuedDate().orElse(null));
-			logger.info("accès à la base de données : " + preparedStatement);
+
 			int statut = preparedStatement.executeUpdate();
+			logger.info("Access to the data base : " + SQL_INSERT + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
 
 			if (statut == 0) {
-				throw new DAOException("Echec de la creation de -computer-, aucune ligne ajoutee dans la table");
+				logger.warn("Failed of the creation of the new computer, no line added");
+				throw new DAOException("Failed of the creation of the new computer, no line added");
 			}
 
 			valeurAutoGenerees = preparedStatement.getGeneratedKeys();
 			if (valeurAutoGenerees.next()) {
 				computer.setId(valeurAutoGenerees.getInt(1));
-				System.out.println("\nNEW COMPUTER\n" + computer);
+				logger.info("\nNEW COMPUTER\n" + computer);
 			} else {
-				logger.error("ECHEC de la requete (" + SQL_INSERT + ")");
-				throw new DAOException("Echec de la creation de -computer-, aucune ligne ajoutee dans la table");
+				logger.warn("Failed of the creation of the new computer, no line added");
+				throw new DAOException("Failed of the creation of the new computer, no line added");
 			}
+			
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			logger.warn("Failure of the query : " + SQL_INSERT + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
+
+			throw new DAOException("Failure of the query : " + SQL_INSERT + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
 		} finally {
-			fermeturesSilencieuses(valeurAutoGenerees, preparedStatement, connexion);
+			closeConnections(valeurAutoGenerees, preparedStatement, connexion);
 		}
 
 		return Optional.ofNullable(computer.getId());
@@ -79,43 +94,20 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_ALL, false);
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_FIND_ALL, false);
+			
 			resultSet = preparedStatement.executeQuery();
-
+			logger.info("Access to the data base : " + SQL_FIND_ALL);
+			
 			while (resultSet.next()) {
 				computers.add(map(resultSet));
 			}
+			
 		} catch (SQLException e) {
+			logger.warn("Query failure : " + SQL_FIND_ALL);
 			throw new DAOException(e);
 		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
-			;
-		}
-
-		return computers;
-	}
-
-	public List<Computer> findAllWithLimit(int limit) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		List<Computer> computers = new ArrayList<Computer>();
-
-		try {
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_ALL_WITH_LIMIT, false, limit);
-			logger.info("accès à la base de données : " + preparedStatement);
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				computers.add(map(resultSet));
-			}
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
-			;
+			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return computers;
@@ -129,21 +121,23 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_BY_ID, false, id);
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_ID, false, id);
+			
 			resultSet = preparedStatement.executeQuery();
-
+			logger.info("Access to the data base : " + SQL_FIND_BY_ID + " (" + id + ")");
+			
 			if (resultSet.next()) {
 				computer = map(resultSet);
 
-			} else
-				System.out.println("\n This computer does not exist");
+			} else{
+				logger.info("No computer with the id " + id + " found");
+			}
 
 		} catch (SQLException e) {
+			logger.warn("Query failure : " + SQL_FIND_BY_ID + " (" + id + ")");
 			throw new DAOException(e);
 		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
-			;
+			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return Optional.ofNullable(computer);
@@ -157,20 +151,22 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_BY_NAME, false, name);
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_NAME, false, name);
+			
 			resultSet = preparedStatement.executeQuery();
-
+			logger.info("Access to the data base : " + SQL_FIND_BY_NAME + " (" + name + ")");
+			
 			if (resultSet.next()) {
 				computer = map(resultSet);
-			} else
-				System.out.println("\n This computer does not exist");
+			} else {
+				logger.info("No computer with the name " + name + " found");
+			}
 
 		} catch (SQLException e) {
+			logger.warn("Query failure : " + SQL_FIND_BY_NAME + " (" + name + ")");
 			throw new DAOException(e);
 		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
-			;
+			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return Optional.ofNullable(computer);
@@ -184,23 +180,25 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
+			
 			resultSet = preparedStatement.executeQuery();
-
+			logger.info("Access to the data base : " + SQL_SEARCH_BY_NAME + " (" + search + ")");
+			
 			while (resultSet.next()) {
 				computers.add(map(resultSet));
 			}
 		} catch (SQLException e) {
+			logger.warn("Query failure : " + SQL_SEARCH_BY_NAME+ " (" + search + ")");
 			throw new DAOException(e);
 		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return computers;
 	}
-	
-	public List<Computer> searchByCompany(String search) throws DAOException {
+
+	public List<Computer> findByCompany(String search) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -208,71 +206,102 @@ public class ComputerDao {
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_FIND_BY_COMPANY, false, search);
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_COMPANY, false, search);
+			
 			resultSet = preparedStatement.executeQuery();
-
+			logger.info("Access to the data base : " + SQL_FIND_BY_COMPANY + " (" + search + ")");
+			
 			while (resultSet.next()) {
 				computers.add(map(resultSet));
 			}
 		} catch (SQLException e) {
+			logger.warn("Query failure : " + SQL_FIND_BY_COMPANY+ " (" + search + ")");
 			throw new DAOException(e);
 		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return computers;
 	}
 
-	public boolean update(Computer cpu) throws DAOException {
+	public boolean update(Computer computer) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		int statut;
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, true, cpu.getName(),
-					cpu.getCompanyId(), cpu.getIntroducedDate().orElse(null), cpu.getDiscontinuedDate().orElse(null), cpu.getId());
-			logger.info("accès à la base de données : " + preparedStatement);
+			preparedStatement = initPreparedStatement(connexion, SQL_UPDATE, true, computer.getName(),
+					computer.getCompanyId(), computer.getIntroducedDate().orElse(null), computer.getDiscontinuedDate().orElse(null), computer.getId());
+
 			statut = preparedStatement.executeUpdate();
+			logger.info("Access to the data base : " + SQL_UPDATE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
 
 			if (statut == 0) {
-				System.out.println("\n This computer does not exist");
+				logger.info("This computer does not exist");
 				return false;
 			}
 
 			return true;
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			logger.warn("Query failure : " + SQL_UPDATE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
+			
+			throw new DAOException("Query failure : " + SQL_UPDATE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
 		} finally {
-			fermeturesSilencieuses(preparedStatement, connexion);
+			closeConnections(preparedStatement, connexion);
 		}
 	}
 
-	public boolean delete(Computer cpu) throws DAOException {
+	public boolean delete(Computer computer) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		int statut;
 
 		try {
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE, true, cpu.getId());
-			logger.info("accès à la base de données : " + preparedStatement);
-			statut = preparedStatement.executeUpdate();
+			preparedStatement = initPreparedStatement(connexion, SQL_DELETE, true, computer.getId());
 
+			statut = preparedStatement.executeUpdate();
+			logger.info("Access to the data base : " + SQL_DELETE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
+			
 			if (statut == 0) {
-				System.out.println("\n This computer does not exist");
+				logger.info("This computer does not exist");
 				return false;
 			}
 
 			return true;
 
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			logger.warn("Query failure : " + SQL_DELETE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
+			
+			throw new DAOException("Query failure : " + SQL_DELETE + "("
+					+ computer.getName() + "," 
+					+ computer.getCompanyId() + ","
+					+ computer.getIntroducedDate().orElse(null) + ","
+					+ computer.getDiscontinuedDate().orElse(null) + ")");
 
 		} finally {
-			fermeturesSilencieuses(preparedStatement, connexion);
-			;
+			closeConnections(preparedStatement, connexion);
 		}
 	}
 

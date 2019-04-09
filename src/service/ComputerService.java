@@ -45,7 +45,7 @@ public class ComputerService {
 	}
 
 	public List<ComputerDto> searchByCompany(String search){
-		return mapper.parseToDtosList(computerDao.searchByCompany(search));
+		return mapper.parseToDtosList(computerDao.findByCompany(search));
 	}
 
 	public void addComputer(HttpServletRequest request) {
