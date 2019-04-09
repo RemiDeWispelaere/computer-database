@@ -30,6 +30,7 @@ public class DAOFactory {
 		String url;
 		String nomUtilisateur;
 		String motDePasse;
+		String autoCommit;
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fichierProperties = classLoader.getResourceAsStream( FICHIER_PROPERTIES );
@@ -43,6 +44,8 @@ public class DAOFactory {
 			url = properties.getProperty("url");
 			nomUtilisateur = properties.getProperty("nomUtilisateur");
 			motDePasse = properties.getProperty("motDePasse");
+			autoCommit = properties.getProperty("autoCommit");
+			
 		} catch ( IOException e ) {
 			throw new DAOConfigurationException( "Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e );
 		}
@@ -57,6 +60,7 @@ public class DAOFactory {
 		hikariConfig.setJdbcUrl(url);
 		hikariConfig.setUsername(nomUtilisateur);
 		hikariConfig.setPassword(motDePasse);
+		hikariConfig.setAutoCommit(autoCommit.equals("false") ? false : true);
 
 		return new DAOFactory(new HikariDataSource(hikariConfig));
 	}

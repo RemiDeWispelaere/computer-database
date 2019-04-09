@@ -28,7 +28,7 @@ public class Launcher {
 	static Scanner scanner = new Scanner(System.in);
 	static Logger logger = Logger.getLogger(Launcher.class);
 	enum MainChoice{
-		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE;
+		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE, DELETE_COMPANY;
 	}
 	
 	enum QueryChoice{
@@ -48,7 +48,7 @@ public class Launcher {
 		MainChoice choice = MainChoice.EXIT;
 		do {
 			printMenu();
-			choice = MainChoice.values()[askChoice(6)];
+			choice = MainChoice.values()[askChoice(7)];
 
 			switch(choice) {
 			case ALL_COMPUTERS: //List of computers
@@ -68,6 +68,9 @@ public class Launcher {
 				break;
 			case DELETE: //Delete computer
 				deleteComputer();
+				break;
+			case DELETE_COMPANY: //Delete company and computers related
+				deleteCompany();
 				break;
 			default:
 				//	
@@ -159,6 +162,18 @@ public class Launcher {
 			computerDao.delete(cpuToDelete);
 	}
 
+	public static void deleteCompany() {
+		logger.info("delete company and computers related");
+		System.out.println("Search which company you want to delete\n");
+		Company companyToDelete = searchCompanyDetails().orElseThrow(IllegalArgumentException::new);
+		
+		printDeleteValidation();
+		int choice2 = askChoice(2);
+		
+		if(choice2 == 1)
+			companyDao.deleteCompanyt(companyToDelete);
+	}
+	
 	/**
 	 * Get a computer (search by Id or by Name)
 	 * 
@@ -206,6 +221,49 @@ public class Launcher {
 
 		return Optional.empty();
 	}
+	
+	public static Optional<Company> searchCompanyDetails(){
+		logger.info("company details");
+		printCompanyQueryMenu();
+		QueryChoice choice = QueryChoice.values()[askChoice(2) - 1];
+
+		switch(choice) {
+		case BY_ID://find by Id
+			System.out.print("ENTER THE ID : ");
+			try {
+				Long id = Long.valueOf(scanner.nextLine());
+				Optional<Company> companyOpt = companyDao.findById(id);
+				Company company = null;
+				
+				if(companyOpt.isPresent()) {
+					company = companyOpt.get();
+					System.out.println(company);
+				}
+
+				return Optional.ofNullable(company);
+			}catch(NumberFormatException e) {
+				System.out.println("INVALID ID (integer only)");
+			}
+			break;
+		case BY_NAME://find by Name
+			System.out.print("ENTER THE NAME : ");
+			String name = scanner.nextLine();
+
+			Optional<Company> companyOpt = companyDao.findByName(name);
+			Company company = null;
+			
+			if(companyOpt.isPresent()) {
+				company = companyOpt.get();
+				System.out.println(company);
+			}
+
+			return Optional.ofNullable(company);
+		default:
+			//
+		}
+
+		return Optional.empty();
+	}
 
 	////////PRINTS////////
 	/**
@@ -218,7 +276,8 @@ public class Launcher {
 				+ "[3] Show computer details\n"
 				+ "[4] Create a new computer\n"
 				+ "[5] Update a computers\n"
-				+ "[6] Delete a computers\n\n"
+				+ "[6] Delete a computers\n"
+				+ "[7] Delete a company\n\n"
 				+ "[0] EXIT\n"
 				+ "_______________________\n\n");
 	}
@@ -228,6 +287,17 @@ public class Launcher {
 	 */
 	public static void printComputerQueryMenu() {
 		System.out.println("_____COMPUTER DETAILS MENU_____\n\n"
+				+ "[1] Find by Id\n"
+				+ "[2] Find by Name\n"
+				+ "[0] EXIT\n"
+				+ "_______________________\n\n");
+	}
+	
+	/**
+	 * Print the difference query options on the console to search for a company (2 options)
+	 */
+	public static void printCompanyQueryMenu() {
+		System.out.println("_____COMPANY DETAILS MENU_____\n\n"
 				+ "[1] Find by Id\n"
 				+ "[2] Find by Name\n"
 				+ "[0] EXIT\n"
