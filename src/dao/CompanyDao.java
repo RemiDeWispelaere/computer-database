@@ -9,9 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
 import model.Company;
 
+@Repository("companyDao")
+@Scope("singleton")
 public class CompanyDao implements DAOUtilitaire{
 
 	private static final String SQL_FIND_ALL = "SELECT id, name FROM company";
@@ -22,14 +28,17 @@ public class CompanyDao implements DAOUtilitaire{
 	private static final String SQL_DELETE_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
 
 	private static final Logger logger  = Logger.getLogger(CompanyDao.class);
+	
+	@Autowired
 	private DAOFactory daoFactory;
 
 
 	////////CONSTRUCTOR//////
 
-	public CompanyDao(DAOFactory daoFactory) {
-		this.daoFactory = daoFactory;
-	}
+//	@Autowired
+//	public CompanyDao(@Qualifier("daoFactory") DAOFactory daoFactory) {
+//		this.daoFactory = daoFactory;
+//	}
 
 	////////QUERIES////////
 

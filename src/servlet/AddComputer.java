@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import dto.CompanyDto;
 import service.CompanyService;
@@ -27,8 +29,11 @@ public class AddComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final CompanyService companyService = new CompanyService();
-	private static final ComputerService computerService = new ComputerService();
+	@Autowired @Qualifier("companyService")
+	private static CompanyService companyService;
+	@Autowired @Qualifier("computerService")
+	private static ComputerService computerService;
+	
 	private static final Logger logger = Logger.getLogger(AddComputer.class);
 	
 	

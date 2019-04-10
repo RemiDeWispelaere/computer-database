@@ -6,14 +6,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import dao.CompanyDao;
 import dao.DAOFactory;
 import model.Company;
 import model.Computer;
 
+@Service("computerMapper")
+@Scope("singleton")
 public class ComputerMapper {
 	
-	public static final CompanyDao companyDao = DAOFactory.getInstance().getCompanyDao();
+	@Autowired @Qualifier("companyDao")
+	public static CompanyDao companyDao;
 
 	public ComputerMapper(){
 

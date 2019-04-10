@@ -1,6 +1,5 @@
 package service;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -9,12 +8,18 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import dao.ComputerDao;
 import dao.DAOException;
-import dao.DAOFactory;
 import dto.ComputerDto;
 import dto.ComputerMapper;
 
+@Service("computerService")
+@Scope("singleton")
 public class ComputerService {
 
 	private static final String PARAM_COMPUTER_ID = "computerId";
@@ -23,8 +28,10 @@ public class ComputerService {
 	private static final String PARAM_COMPUTER_DISCONTINUED = "discontinued";
 	private static final String PARAM_COMPANY_ID = "companyId";
 
-	private static final ComputerMapper mapper = new ComputerMapper();
-	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
+	@Autowired @Qualifier("computerMapper")
+	private static ComputerMapper mapper;
+	@Autowired @Qualifier("computerDao")
+	private static ComputerDao computerDao;
 
 	public ComputerService() {
 		super();

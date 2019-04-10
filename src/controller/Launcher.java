@@ -11,8 +11,9 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import dao.DAOFactory;
+import config.SpringConfig;
 import model.Company;
 import model.Computer;
 import model.PageManager;
@@ -21,12 +22,14 @@ import dao.ComputerDao;
 
 public class Launcher {
 
-	static DAOFactory daoFactory = DAOFactory.getInstance();
-	static ComputerDao computerDao = (ComputerDao) daoFactory.getComputerDao();
-	static CompanyDao companyDao = (CompanyDao) daoFactory.getCompanyDao();
-
+	static ComputerDao computerDao;
+	static CompanyDao companyDao;
+	
 	static Scanner scanner = new Scanner(System.in);
 	static Logger logger = Logger.getLogger(Launcher.class);
+	
+	static int nbCompanies;
+	
 	enum MainChoice{
 		EXIT, ALL_COMPUTERS, ALL_COMPANIES, DETAILS, CREATE, UPDATE, DELETE, DELETE_COMPANY;
 	}
@@ -41,6 +44,13 @@ public class Launcher {
 
 	public static void main(String[] args){ 
 
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+		
+		computerDao = applicationContext.getBean("computerDao", ComputerDao.class);
+		companyDao = applicationContext.getBean("companyDao", CompanyDao.class);
+		
+		nbCompanies = companyDao.findAll().size();
+		
 		logger.info("START");
 		System.out.println("-_-_-_-_START_-_-_-_-");
 		
@@ -84,6 +94,8 @@ public class Launcher {
 
 		logger.info("STOP");
 		System.out.println("-_-_-_-_STOP_-_-_-_-");
+		
+		applicationContext.close();
 	}
 
 	/**
@@ -444,8 +456,7 @@ public class Launcher {
 				stCompany = scanner.nextLine();
 			}
 
-		}while(!validChoice(stCompany, 43)); 
-		//TODO gerer le nombre de company limite dynamiquement
+		}while(!validChoice(stCompany, nbCompanies)); 
 
 		logger.info("company id chosen (new computer) : " + stCompany);
 		return Long.valueOf(stCompany);
@@ -474,8 +485,7 @@ public class Launcher {
 				stCompany = scanner.nextLine();
 			}
 
-		}while(!validChoice(stCompany, 43)); 
-		//TODO gerer le nombre de company limite dynamiquement
+		}while(!validChoice(stCompany, nbCompanies));
 
 		logger.info("company id chosen (update computer) : " + stCompany);
 		return Long.valueOf(stCompany);

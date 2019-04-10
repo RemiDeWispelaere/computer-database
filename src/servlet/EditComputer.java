@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import dto.CompanyDto;
 import dto.ComputerDto;
 import service.CompanyService;
@@ -29,9 +32,11 @@ public class EditComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final ComputerService computerService = new ComputerService();
-	private static final CompanyService companyService = new CompanyService();
-       
+	@Autowired @Qualifier("companyService")
+	private static CompanyService companyService;
+	@Autowired @Qualifier("computerService")
+	private static ComputerService computerService;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */

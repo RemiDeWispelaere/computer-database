@@ -4,8 +4,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import model.Company;
 
+@Service("companyMapper")
+@Scope("singleton")
 public class CompanyMapper {
 
 	public CompanyMapper() {

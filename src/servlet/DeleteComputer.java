@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import dao.ComputerDao;
-import dao.DAOFactory;
-import dto.ComputerDto;
 import model.Computer;
 
 /**
@@ -23,7 +23,8 @@ public class DeleteComputer extends HttpServlet {
 	private static final String VIEW_RETURN = "ListComputer";
 	private static final String PARAM_LIST_COMPUTER = "selection"; 
 	
-	private static final ComputerDao computerDao = DAOFactory.getInstance().getComputerDao();
+	@Autowired @Qualifier("computerDao")
+	private static ComputerDao computerDao;
 	
 	private static final long serialVersionUID = 1L;
 	
