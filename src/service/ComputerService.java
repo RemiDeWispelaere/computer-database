@@ -29,9 +29,9 @@ public class ComputerService {
 	private static final String PARAM_COMPANY_ID = "companyId";
 
 	@Autowired @Qualifier("computerMapper")
-	private static ComputerMapper mapper;
+	private ComputerMapper mapper;
 	@Autowired @Qualifier("computerDao")
-	private static ComputerDao computerDao;
+	private ComputerDao computerDao;
 
 	public ComputerService() {
 		super();

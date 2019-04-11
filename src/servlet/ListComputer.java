@@ -3,15 +3,20 @@ package servlet;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import dao.CompanyDao;
+import dao.ComputerDao;
 import dto.CompanyDto;
 import dto.ComputerDto;
 import model.PageManager;
@@ -32,18 +37,20 @@ public class ListComputer extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Autowired @Qualifier("companyService")
-	private static CompanyService companyService;
-	@Autowired @Qualifier("computerService")
-	private static ComputerService computerService;
-	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ListComputer() {
-		super();
-	}
+	private static final Logger logger = Logger.getLogger(ListComputer.class);
 
+	@Autowired @Qualifier("companyService")
+	private CompanyService companyService;
+	@Autowired @Qualifier("computerService")
+	private ComputerService computerService;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		logger.info("INIT");
+		super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */

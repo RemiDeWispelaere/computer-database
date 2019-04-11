@@ -2,14 +2,17 @@ package servlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import dao.ComputerDao;
 import model.Computer;
@@ -23,19 +26,20 @@ public class DeleteComputer extends HttpServlet {
 	private static final String VIEW_RETURN = "ListComputer";
 	private static final String PARAM_LIST_COMPUTER = "selection"; 
 	
+	private static final Logger logger = Logger.getLogger(DeleteComputer.class);
+
 	@Autowired @Qualifier("computerDao")
-	private static ComputerDao computerDao;
+	private ComputerDao computerDao;
 	
 	private static final long serialVersionUID = 1L;
 	
-    
-	/**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DeleteComputer() {
-        super();
-    }
-
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		logger.info("INIT");
+		super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */

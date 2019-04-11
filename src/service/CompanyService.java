@@ -16,9 +16,9 @@ import dto.CompanyMapper;
 public class CompanyService {
 
 	@Autowired @Qualifier("companyMapper")
-	private static CompanyMapper mapper;
+	private CompanyMapper mapper;
 	@Autowired @Qualifier("companyDao")
-	private static CompanyDao companyDao;
+	private CompanyDao companyDao;
 	
 	public CompanyService() {
 		super();

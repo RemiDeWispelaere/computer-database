@@ -21,7 +21,7 @@ import model.Computer;
 public class ComputerMapper {
 	
 	@Autowired @Qualifier("companyDao")
-	public static CompanyDao companyDao;
+	private CompanyDao companyDao;
 
 	public ComputerMapper(){
 

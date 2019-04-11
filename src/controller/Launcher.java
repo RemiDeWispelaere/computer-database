@@ -17,6 +17,7 @@ import config.SpringConfig;
 import model.Company;
 import model.Computer;
 import model.PageManager;
+import service.ComputerService;
 import dao.CompanyDao;
 import dao.ComputerDao;
 
@@ -48,7 +49,7 @@ public class Launcher {
 		
 		computerDao = applicationContext.getBean("computerDao", ComputerDao.class);
 		companyDao = applicationContext.getBean("companyDao", CompanyDao.class);
-		
+
 		nbCompanies = companyDao.findAll().size();
 		
 		logger.info("START");

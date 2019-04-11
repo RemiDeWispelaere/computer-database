@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import dto.CompanyDto;
 import service.CompanyService;
@@ -30,25 +32,17 @@ public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired @Qualifier("companyService")
-	private static CompanyService companyService;
+	private CompanyService companyService;
 	@Autowired @Qualifier("computerService")
-	private static ComputerService computerService;
+	private ComputerService computerService;
 	
 	private static final Logger logger = Logger.getLogger(AddComputer.class);
 	
-	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AddComputer() {
-		super();
-		logger.info("CONSTR");
-	}
-	
 	@Override
-	public void init() throws ServletException {
-		super.init();
+	public void init(ServletConfig config) throws ServletException {
 		logger.info("INIT");
+		super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
 	/**
