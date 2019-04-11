@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import dao.CompanyDao;
-import dao.DAOFactory;
 import model.Company;
 import model.Computer;
 

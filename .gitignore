@@ -129,3 +129,5 @@ buildNumber.properties
 
 # End of https://www.gitignore.io/api/java,maven,linux,eclipse,java-web
 /build/
+
+dao.properties

@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -31,15 +32,8 @@ public class ComputerDao implements DAOUtilitaire{
 
 	private static final Logger logger = Logger.getLogger(ComputerDao.class);
 
-	@Autowired @Qualifier("daoFactory")
-	private DAOFactory daoFactory;
-
-	//////// CONSTRUCTOR//////
-
-//	@Autowired
-//	public ComputerDao(@Qualifier("daoFactory") DAOFactory daoFactory) {
-//		this.daoFactory = daoFactory;
-//	}
+	@Autowired
+	private DataSource dataSource;
 
 	//////// QUERIES////////
 
@@ -50,7 +44,7 @@ public class ComputerDao implements DAOUtilitaire{
 		ResultSet valeurAutoGenerees = null;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_INSERT, true, computer.getName(),
 					computer.getCompanyId(), computer.getIntroducedDate().orElse(null), computer.getDiscontinuedDate().orElse(null));
 
@@ -101,7 +95,7 @@ public class ComputerDao implements DAOUtilitaire{
 		List<Computer> computers = new ArrayList<Computer>();
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_ALL, false);
 			
 			resultSet = preparedStatement.executeQuery();
@@ -128,7 +122,7 @@ public class ComputerDao implements DAOUtilitaire{
 		Computer computer = null;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_ID, false, id);
 			
 			resultSet = preparedStatement.executeQuery();
@@ -158,7 +152,7 @@ public class ComputerDao implements DAOUtilitaire{
 		Computer computer = null;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_NAME, false, name);
 			
 			resultSet = preparedStatement.executeQuery();
@@ -187,7 +181,7 @@ public class ComputerDao implements DAOUtilitaire{
 		List<Computer> computers = new ArrayList<Computer>();
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
 			
 			resultSet = preparedStatement.executeQuery();
@@ -213,7 +207,7 @@ public class ComputerDao implements DAOUtilitaire{
 		List<Computer> computers = new ArrayList<Computer>();
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_COMPANY, false, search);
 			
 			resultSet = preparedStatement.executeQuery();
@@ -238,7 +232,7 @@ public class ComputerDao implements DAOUtilitaire{
 		int statut;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_UPDATE, true, computer.getName(),
 					computer.getCompanyId(), computer.getIntroducedDate().orElse(null), computer.getDiscontinuedDate().orElse(null), computer.getId());
 
@@ -278,7 +272,7 @@ public class ComputerDao implements DAOUtilitaire{
 		int statut;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_DELETE, true, computer.getId());
 
 			statut = preparedStatement.executeUpdate();

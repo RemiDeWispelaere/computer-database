@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -30,15 +31,7 @@ public class CompanyDao implements DAOUtilitaire{
 	private static final Logger logger  = Logger.getLogger(CompanyDao.class);
 	
 	@Autowired
-	private DAOFactory daoFactory;
-
-
-	////////CONSTRUCTOR//////
-
-//	@Autowired
-//	public CompanyDao(@Qualifier("daoFactory") DAOFactory daoFactory) {
-//		this.daoFactory = daoFactory;
-//	}
+	private DataSource dataSource;
 
 	////////QUERIES////////
 
@@ -49,7 +42,7 @@ public class CompanyDao implements DAOUtilitaire{
 		List<Company> companies = new ArrayList<Company>();
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion,SQL_FIND_ALL, false);
 
 			resultSet = preparedStatement.executeQuery();
@@ -58,8 +51,6 @@ public class CompanyDao implements DAOUtilitaire{
 			while(resultSet.next()) {
 				companies.add(map(resultSet));
 			}
-
-			connexion.commit();
 
 		}catch(SQLException e){
 			logger.warn("Query failure : " + SQL_FIND_ALL);
@@ -78,7 +69,7 @@ public class CompanyDao implements DAOUtilitaire{
 		Company company = null;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_ID, false, id);
 
 			resultSet = preparedStatement.executeQuery();
@@ -90,8 +81,6 @@ public class CompanyDao implements DAOUtilitaire{
 			} else {
 				logger.info("No company with the id " + id + " found");
 			}
-			
-			connexion.commit();
 
 		} catch (SQLException e) {
 			logger.warn("Query failure : " + SQL_FIND_BY_ID+ " (" + id + ")");
@@ -110,7 +99,7 @@ public class CompanyDao implements DAOUtilitaire{
 		Company company = null;
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_NAME, false, name);
 
 			resultSet = preparedStatement.executeQuery();
@@ -122,8 +111,6 @@ public class CompanyDao implements DAOUtilitaire{
 			} else{
 				logger.info("No company named " + name + " found");
 			}
-
-			connexion.commit();
 
 		} catch (SQLException e) {
 			logger.warn("Query failure : " + SQL_FIND_BY_NAME+ " (" + name + ")");
@@ -142,7 +129,7 @@ public class CompanyDao implements DAOUtilitaire{
 		List<Company> companies = new ArrayList<Company>();
 
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
 			preparedStatement = initPreparedStatement(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
 
 			resultSet = preparedStatement.executeQuery();
@@ -151,8 +138,6 @@ public class CompanyDao implements DAOUtilitaire{
 			while (resultSet.next()) {
 				companies.add(map(resultSet));
 			}
-
-			connexion.commit();
 
 		} catch (SQLException e) {
 			logger.warn("Query failure : " + SQL_SEARCH_BY_NAME+ " (" + search + ")");
@@ -169,7 +154,8 @@ public class CompanyDao implements DAOUtilitaire{
 		PreparedStatement preparedStatementCompany = null;
 		PreparedStatement preparedStatementComputers = null;
 		try {
-			connexion = daoFactory.getConnection();
+			connexion = dataSource.getConnection();
+			connexion.setAutoCommit(false);
 			preparedStatementComputers = initPreparedStatement(connexion, SQL_DELETE_COMPUTERS, false, company.getId());
 			preparedStatementCompany = initPreparedStatement(connexion, SQL_DELETE_BY_ID, false, company.getId());
 

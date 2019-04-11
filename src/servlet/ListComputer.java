@@ -12,11 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import dao.CompanyDao;
-import dao.ComputerDao;
 import dto.CompanyDto;
 import dto.ComputerDto;
 import model.PageManager;
@@ -39,9 +36,9 @@ public class ListComputer extends HttpServlet {
 	
 	private static final Logger logger = Logger.getLogger(ListComputer.class);
 
-	@Autowired @Qualifier("companyService")
+	@Autowired
 	private CompanyService companyService;
-	@Autowired @Qualifier("computerService")
+	@Autowired
 	private ComputerService computerService;
 	
 	@Override
