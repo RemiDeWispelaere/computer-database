@@ -1,4 +1,4 @@
-package config;
+package main.java.config;
 
 import javax.sql.DataSource;
 
@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ComponentScan("dao")
-@ComponentScan("dto")
-@ComponentScan("service")
+@ComponentScan("main.java.dao")
+@ComponentScan("main.java.dto")
+@ComponentScan("main.java.service")
 @PropertySource("classpath:dao.properties")
 public class SpringConfig {
 

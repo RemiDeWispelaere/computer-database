@@ -1,4 +1,4 @@
-package service;
+package main.java.service;
 
 import java.util.List;
 
@@ -7,17 +7,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import dao.CompanyDao;
-import dto.CompanyDto;
-import dto.CompanyMapper;
+import main.java.dao.CompanyDao;
+import main.java.dto.CompanyDto;
+import main.java.dto.CompanyMapper;
 
 @Service("companyService")
 @Scope("singleton")
 public class CompanyService {
 
-	@Autowired @Qualifier("companyMapper")
+	@Autowired
 	private CompanyMapper mapper;
-	@Autowired @Qualifier("companyDao")
+	@Autowired
 	private CompanyDao companyDao;
 	
 	public CompanyService() {

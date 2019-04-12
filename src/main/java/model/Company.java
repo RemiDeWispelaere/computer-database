@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 /**
  * The representation of a company in the DB

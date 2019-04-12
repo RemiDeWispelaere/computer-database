@@ -1,4 +1,4 @@
-package dto;
+package main.java.dto;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import dao.CompanyDao;
-import model.Company;
-import model.Computer;
+import main.java.dao.CompanyDao;
+import main.java.model.Company;
+import main.java.model.Computer;
 
 @Service("computerMapper")
 @Scope("singleton")

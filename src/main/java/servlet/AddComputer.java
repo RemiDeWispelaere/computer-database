@@ -1,4 +1,4 @@
-package servlet;
+package main.java.servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import dto.CompanyDto;
-import service.CompanyService;
-import service.ComputerService;
+import main.java.dto.CompanyDto;
+import main.java.service.CompanyService;
+import main.java.service.ComputerService;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -31,9 +31,9 @@ public class AddComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Autowired @Qualifier("companyService")
+	@Autowired
 	private CompanyService companyService;
-	@Autowired @Qualifier("computerService")
+	@Autowired
 	private ComputerService computerService;
 	
 	private static final Logger logger = Logger.getLogger(AddComputer.class);

@@ -1,4 +1,4 @@
-package servlet;
+package main.java.servlet;
 
 import java.io.IOException;
 
@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import dao.ComputerDao;
-import model.Computer;
+import main.java.dao.ComputerDao;
+import main.java.model.Computer;
 
 /**
  * Servlet implementation class DeleteComputer
@@ -28,7 +28,7 @@ public class DeleteComputer extends HttpServlet {
 	
 	private static final Logger logger = Logger.getLogger(DeleteComputer.class);
 
-	@Autowired @Qualifier("computerDao")
+	@Autowired
 	private ComputerDao computerDao;
 	
 	private static final long serialVersionUID = 1L;

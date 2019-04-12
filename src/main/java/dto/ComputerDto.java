@@ -1,4 +1,4 @@
-package dto;
+package main.java.dto;
 
 import java.util.Comparator;
 

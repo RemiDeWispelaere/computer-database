@@ -1,4 +1,4 @@
-package dao;
+package main.java.dao;
 
 public class DAOException extends RuntimeException {
 

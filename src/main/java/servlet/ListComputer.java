@@ -1,4 +1,4 @@
-package servlet;
+package main.java.servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,11 +14,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import dto.CompanyDto;
-import dto.ComputerDto;
-import model.PageManager;
-import service.CompanyService;
-import service.ComputerService;
+import main.java.dto.CompanyDto;
+import main.java.dto.ComputerDto;
+import main.java.model.PageManager;
+import main.java.service.CompanyService;
+import main.java.service.ComputerService;
 
 /**
  * Servlet implementation class ListComputer

@@ -1,4 +1,4 @@
-package dto;
+package main.java.dto;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import model.Company;
+import main.java.model.Company;
 
 @Service("companyMapper")
 @Scope("singleton")

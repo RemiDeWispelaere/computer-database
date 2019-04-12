@@ -1,4 +1,4 @@
-package dao;
+package main.java.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
-import model.Computer;
+import main.java.model.Computer;
 
 @Repository("computerDao")
 @Scope("singleton")

@@ -1,7 +1,7 @@
 /**
  * @author DE WISPELAERE Rémi
  */
-package controller;
+package main.java.controller;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -13,12 +13,12 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.SpringConfig;
-import model.Company;
-import model.Computer;
-import model.PageManager;
-import dao.CompanyDao;
-import dao.ComputerDao;
+import main.java.config.SpringConfig;
+import main.java.model.Company;
+import main.java.model.Computer;
+import main.java.model.PageManager;
+import main.java.dao.CompanyDao;
+import main.java.dao.ComputerDao;
 
 public class Launcher {
 
