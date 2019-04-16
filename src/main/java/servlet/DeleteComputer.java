@@ -15,6 +15,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import main.java.dao.ComputerDao;
 import main.java.model.Computer;
+import main.java.service.ComputerService;
 
 /**
  * Servlet implementation class DeleteComputer
@@ -28,7 +29,7 @@ public class DeleteComputer extends HttpServlet {
 	private static final Logger logger = Logger.getLogger(DeleteComputer.class);
 
 	@Autowired
-	private ComputerDao computerDao;
+	private ComputerService computerService;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -43,7 +44,6 @@ public class DeleteComputer extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -52,9 +52,9 @@ public class DeleteComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String[] stListComputersDto = request.getParameter(PARAM_LIST_COMPUTER).split(",");
-		
+		System.out.println("------------------------------" + request.getParameter("startIndex"));
 		for(String cpuId : stListComputersDto) {
-			computerDao.delete(new Computer.ComputerBuilder().withId(Integer.valueOf(cpuId)).build());
+			computerService.deleteComputer(Integer.valueOf(cpuId));
 		}
 		
 		response.sendRedirect(VIEW_RETURN);

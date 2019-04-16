@@ -13,7 +13,14 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import main.java.model.Company;
 
@@ -25,157 +32,113 @@ public class CompanyDao implements DAOUtilitaire{
 	private static final String SQL_FIND_BY_ID = "SELECT id, name FROM company WHERE id = ?";
 	private static final String SQL_FIND_BY_NAME = "SELECT id, name FROM company WHERE name = ?";
 	private static final String SQL_SEARCH_BY_NAME = "SELECT id, name FROM company WHERE name LIKE ?";
-	private static final String SQL_DELETE_BY_ID = "DELETE FROM company WHERE id = ?";
-	private static final String SQL_DELETE_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
+	private static final String SQL_DELETE_BY_ID = "DELETE FROM company WHERE id = :companyId";
+	private static final String SQL_DELETE_COMPUTERS = "DELETE FROM computer WHERE company_id = :companyId";
 
 	private static final Logger logger  = Logger.getLogger(CompanyDao.class);
-	
+
 	@Autowired
 	private DataSource dataSource;
 
 	////////QUERIES////////
 
 	public List<Company> findAll() throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+
 		List<Company> companies = new ArrayList<Company>();
 
 		try {
-			connexion = dataSource.getConnection();
-			preparedStatement = initPreparedStatement(connexion,SQL_FIND_ALL, false);
-
-			resultSet = preparedStatement.executeQuery();
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			companies = jdbcTemplate.query(SQL_FIND_ALL, new MapCompany());
 			logger.info("Access to the data base : " + SQL_FIND_ALL);
 
-			while(resultSet.next()) {
-				companies.add(map(resultSet));
-			}
-
-		}catch(SQLException e){
+		}catch(DataAccessException e){
 			logger.warn("Query failure : " + SQL_FIND_ALL);
 			throw new DAOException("Query failure : " + e);
-		}finally {
-			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return companies;
 	}
 
 	public Optional<Company> findById(Long id) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+
 		Company company = null;
 
 		try {
-			connexion = dataSource.getConnection();
-			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_ID, false, id);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			company = jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new MapCompany(), id);
 
-			resultSet = preparedStatement.executeQuery();
 			logger.info("Access to the data base : " + SQL_FIND_BY_ID + " (" + id + ")");
 
-			if (resultSet.next()) {
-				company = map(resultSet);
+		} catch(EmptyResultDataAccessException e) {
+			logger.warn("No company with the id " + id + " found");
 
-			} else {
-				logger.info("No company with the id " + id + " found");
-			}
-
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Query failure : " + SQL_FIND_BY_ID+ " (" + id + ")");
 			throw new DAOException("Query failure : " + e);
-		} finally {
-			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return Optional.ofNullable(company);
 	}
 
 	public Optional<Company> findByName(String name) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+
 		Company company = null;
 
 		try {
-			connexion = dataSource.getConnection();
-			preparedStatement = initPreparedStatement(connexion, SQL_FIND_BY_NAME, false, name);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			company = jdbcTemplate.queryForObject(SQL_FIND_BY_NAME, new MapCompany(), name);
 
-			resultSet = preparedStatement.executeQuery();
 			logger.info("Access to the data base : " + SQL_FIND_BY_NAME+ " (" + name + ")");
 
-			if (resultSet.next()) {
-				company = map(resultSet);
-
-			} else{
-				logger.info("No company named " + name + " found");
-			}
-
-		} catch (SQLException e) {
+		} catch (EmptyResultDataAccessException e) {
+			logger.warn("No company named " + name + " found");
+		}
+		catch (DataAccessException e) {
 			logger.warn("Query failure : " + SQL_FIND_BY_NAME+ " (" + name + ")");
 			throw new DAOException("Query failure : " + e);
-		} finally {
-			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return Optional.ofNullable(company);
 	}
 
 	public List<Company> searchByName(String search) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+
 		List<Company> companies = new ArrayList<Company>();
 
 		try {
-			connexion = dataSource.getConnection();
-			preparedStatement = initPreparedStatement(connexion, SQL_SEARCH_BY_NAME, false, "%" + search + "%");
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			companies = jdbcTemplate.query(SQL_SEARCH_BY_NAME, new MapCompany(), "%"+search+"%");
 
-			resultSet = preparedStatement.executeQuery();
 			logger.info("Access to the data base : " + SQL_SEARCH_BY_NAME+ " (" + search + ")");
 
-			while (resultSet.next()) {
-				companies.add(map(resultSet));
-			}
-
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			logger.warn("Query failure : " + SQL_SEARCH_BY_NAME+ " (" + search + ")");
 			throw new DAOException("Query failure : " + e);
-		} finally {
-			closeConnections(resultSet, preparedStatement, connexion);
 		}
 
 		return companies;
 	}
 
+	@Transactional(rollbackFor = DAOException.class)
 	public void deleteCompany(Company company) throws DAOException{
-		Connection connexion = null;
-		PreparedStatement preparedStatementCompany = null;
-		PreparedStatement preparedStatementComputers = null;
+		
 		try {
-			connexion = dataSource.getConnection();
-			connexion.setAutoCommit(false);
-			preparedStatementComputers = initPreparedStatement(connexion, SQL_DELETE_COMPUTERS, false, company.getId());
-			preparedStatementCompany = initPreparedStatement(connexion, SQL_DELETE_BY_ID, false, company.getId());
-
-			int statut = preparedStatementComputers.executeUpdate();
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("companyId", company.getId());
 			
+			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			jdbcTemplate.update(SQL_DELETE_COMPUTERS, params);
+
 			logger.info("Access to the data base : " + SQL_DELETE_COMPUTERS+ " (" + company.getId() + ")");
-			if(statut == 0) {
-				throw new DAOException("Delete Computers related to the company failed - no line deleted");
-			}
 
-			statut = preparedStatementCompany.executeUpdate();
-			logger.info("Access to the data base : " + SQL_DELETE_BY_ID+ " (" + company.getId() + ")");
+			jdbcTemplate.update(SQL_DELETE_BY_ID, params);
 			
-			if(statut == 0) {
-				throw new DAOException("Delete company failed - no line deleted");
-			}
+			logger.info("Access to the data base : " + SQL_DELETE_BY_ID+ " (" + company.getId() + ")");
 
-			connexion.commit();
-
-		}catch(SQLException e){
+		} catch (EmptyResultDataAccessException e) {
+			logger.warn("Delete company failed - no line deleted");
+			
+		} catch (DataAccessException e) {
 			logger.warn("Query failure : " + SQL_DELETE_COMPUTERS+ " (" + company.getId() + ")");
 			logger.warn("Query failure : " + SQL_DELETE_BY_ID+ " (" + company.getId() + ")");
 			throw new DAOException("Query failure : " + e);
@@ -184,10 +147,18 @@ public class CompanyDao implements DAOUtilitaire{
 
 	/////////MAPPING////////
 
-	private static Company map( ResultSet resultSet ) throws SQLException {
-		Company company = new Company();
-		company.setId( resultSet.getInt( "id" ) );
-		company.setName( resultSet.getString( "name" ) );
-		return company;
+	private class MapCompany implements RowMapper<Company>{
+
+		@Override
+		public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+
+			Company company = new Company();
+
+			company.setId( resultSet.getInt( "id" ) );
+			company.setName( resultSet.getString( "name" ) );
+
+			return company;
+		}
 	}
+
 }

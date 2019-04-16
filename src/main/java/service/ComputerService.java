@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import main.java.dao.ComputerDao;
 import main.java.dao.DAOException;
 import main.java.dto.ComputerDto;
 import main.java.dto.ComputerMapper;
+import main.java.model.Computer;
 
 @Service("computerService")
 @Scope("singleton")
@@ -26,6 +28,8 @@ public class ComputerService {
 	private static final String PARAM_COMPUTER_INTRODUCED = "introduced";
 	private static final String PARAM_COMPUTER_DISCONTINUED = "discontinued";
 	private static final String PARAM_COMPANY_ID = "companyId";
+
+	private static final Logger logger = Logger.getLogger(ComputerService.class);
 
 	@Autowired
 	private ComputerMapper mapper;
@@ -61,28 +65,26 @@ public class ComputerService {
 		String stDiscontinuedDate = request.getParameter("discontinued");
 		Long companyId = Long.valueOf(request.getParameter("companyId"));
 
-		try {
-			if(checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
-				ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
-						.withName(computerName)
-						.withCompanyId(companyId)
-						.withIntroducedDate(stIntroducedDate)
-						.withDiscontinuedDate(stDiscontinuedDate)
-						.build();
+		if(checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
+			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
+					.withName(computerName)
+					.withCompanyId(companyId)
+					.withIntroducedDate(stIntroducedDate)
+					.withDiscontinuedDate(stDiscontinuedDate)
+					.build();
 
-				try {
-					computerDao.add(mapper.parseToComputer(computerDto));
-				} catch (DAOException e) {
-					e.printStackTrace();
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+			try {
+				computerDao.add(mapper.parseToComputer(computerDto));
+			} catch (DAOException e) {
+				logger.warn("Can not add this computer");
+				e.printStackTrace();
+			} catch (ParseException e) {
+				logger.warn("Can not parse dto to computer");
+				e.printStackTrace();
 			}
-			else {
-				System.out.println("Impossible d'ajouter l'ordinateur avec ces informations");
-			}
-		} catch (ParseException e) {
-			System.out.println("Impossible de vérifier les dates : " + e);
+		}
+		else {
+			logger.info("Can not add a computer with these informations");
 		}
 
 	}
@@ -95,31 +97,39 @@ public class ComputerService {
 		String stDiscontinuedDate = request.getParameter(PARAM_COMPUTER_DISCONTINUED);
 		Long companyId = Long.valueOf(request.getParameter(PARAM_COMPANY_ID));
 
-		try {
-			if(checkId(computerId) && checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
-				ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
-						.withId(computerId)
-						.withName(computerName)
-						.withCompanyId(companyId)
-						.withIntroducedDate(stIntroducedDate)
-						.withDiscontinuedDate(stDiscontinuedDate)
-						.build();
+		if(checkId(computerId) && checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
+			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
+					.withId(computerId)
+					.withName(computerName)
+					.withCompanyId(companyId)
+					.withIntroducedDate(stIntroducedDate)
+					.withDiscontinuedDate(stDiscontinuedDate)
+					.build();
 
-				try {
-					computerDao.update(mapper.parseToComputer(computerDto));
-				} catch (DAOException e) {
-					e.printStackTrace();
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+			try {
+				computerDao.update(mapper.parseToComputer(computerDto));
+			} catch (DAOException e) {
+				logger.warn("Can not update this computer");
+				e.printStackTrace();
+			} catch (ParseException e) {
+				logger.warn("Can not parse dto to computer");
+				e.printStackTrace();
 			}
-			else {
-				System.out.println("Impossible d'ajouter l'ordinateur avec ces informations");
-			}
-		} catch (ParseException e) {
-			System.out.println("Impossible de vérifier les dates. " + e);
+		}
+		else {
+			logger.info("Can not update a computer with these informations");
 		}
 
+	}
+
+	public void deleteComputer(Integer computerId) {
+		
+		try {
+			computerDao.delete(new Computer.ComputerBuilder().withId(computerId).build());
+		}catch (DAOException e) {
+			logger.warn("Can not delete this computer");
+			e.printStackTrace();
+		}
 	}
 
 	public List<ComputerDto> sortComputers(List<ComputerDto> list, String sortType){
@@ -135,22 +145,32 @@ public class ComputerService {
 		return list;
 	}
 
-	public boolean checkId(int id) {
+	private boolean checkId(int id) {
 		return id > 0;
 	}
 
-	public boolean checkName(String name) {
+	private boolean checkName(String name) {
 		return name != null && name != "";
 	}
 
-	public boolean checkDates(String introDate, String disconDate) throws ParseException {
+	private boolean checkDates(String introDate, String disconDate){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return introDate == null || introDate.equals("")
-				|| disconDate == null || disconDate.equals("")
-				|| dateFormat.parse(disconDate).compareTo(dateFormat.parse(introDate)) >= 0;
+		boolean ret = false;
+
+		try {
+			ret = introDate == null || introDate.equals("")
+					|| disconDate == null || disconDate.equals("")
+					|| dateFormat.parse(disconDate).compareTo(dateFormat.parse(introDate)) >= 0;
+
+		}catch(ParseException e) {
+			logger.warn("Impossible to parse dates : " + e);
+			e.printStackTrace();
+		}
+
+		return ret;
 	}
 
-	public boolean checkCompanyId(Long id) {
+	private boolean checkCompanyId(Long id) {
 		return id > 0;
 	}
 }
