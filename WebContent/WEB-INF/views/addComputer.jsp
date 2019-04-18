@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
 <title>Computer Database</title>
@@ -21,38 +22,38 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form id="addForm" action="AddComputer" method="POST">
+					<form:form id="addForm" action="AddComputer" method="POST" modelAttribute="computerDto">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									placeholder="Computer name" name="computerName" required>
+								<form:label path="name" >Computer name</form:label> <form:input
+									path="name" type="text" class="form-control" id="computerName" 
+									placeholder="Name" name="name" required="true"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									placeholder="Introduced date" name="introduced">
+								<form:label path="introducedDate" >Introduced date</form:label> <form:input
+									path="introducedDate" type="date" class="form-control" id="introduced"
+									placeholder="Introduced date" name="introduced"/>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									placeholder="Discontinued date" name="discontinued">
+								<form:label path="discontinuedDate" >Discontinued date</form:label> <form:input
+									path="discontinuedDate" type="date" class="form-control" id="discontinued"
+									placeholder="Discontinued date" name="discontinued"/>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
+								<form:label path="companyId" >Company</form:label> <form:select
+									path="companyId" class="form-control" id="companyId" name="companyId">
 									<c:forEach items="${companies }" var="company">
 										<option value="${company.id }">${company.id }-
 											${company.name }</option>
 									</c:forEach>
-								</select>
+								</form:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Add" class="btn btn-primary">
 							or <a href="ListComputer" class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

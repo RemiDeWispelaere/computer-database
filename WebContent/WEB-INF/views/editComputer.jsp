@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
 <title>Computer Database</title>
@@ -19,53 +20,41 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: ${computer.id }
+					<div class="label label-default pull-right">id: ${computerDto.id }
 					</div>
 					<h1>Edit Computer</h1>
 
-					<form id="editForm" action="EditComputer" method="POST">
-						<input type="hidden" value="${computer.id }" id="id"
+					<form:form id="editForm" action="EditComputer" method="POST" modelAttribute="computerDto">
+						<form:input path="id" type="hidden" value="${computerDto.id }" id="id"
 							name="computerId" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" value="${computer.name }" required>
+								<form:label path="name">Computer name</form:label> <form:input
+									path="name" type="text" class="form-control" id="computerName"
+									name="computerName" required="true"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.introducedDate.toString().substring(9, 19) }">><!-- substring pour clean l'affichage du optional -->
+								<form:label path="introducedDate">Introduced date</form:label> <form:input
+									path="introducedDate" type="date" class="form-control" id="introduced"
+									name="introduced" value="${computerDto.introducedDate }"/>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.discontinuedDate.toString().substring(9, 19) }">
+								<form:label path="discontinuedDate">Discontinued date</form:label> <form:input
+									path="discontinuedDate" type="date" class="form-control" id="discontinued"
+									name="discontinued" value="${computerDto.discontinuedDate}"/>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
-									<c:forEach items="${ companies }" var="company">
-										<c:choose>
-											<c:when test="${company.id == computer.companyId }">
-												<option value="${ company.id}" selected="selected">
-													${ company.id} - ${ company.name}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${ company.id}">${ company.id}-${ company.name}
-												</option>
-											</c:otherwise>
-										</c:choose>
-
-									</c:forEach>
-								</select>
+								<form:label path="companyId">Company</form:label> <form:select
+									path="companyId" class="form-control" id="companyId" name="companyId">
+										<form:options itemValue="id" items="${ companies }" itemLabel="name"></form:options>
+								</form:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
 							or <a href="ListComputer" class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

@@ -23,12 +23,6 @@ import main.java.model.Computer;
 @Scope("singleton")
 public class ComputerService {
 
-	private static final String PARAM_COMPUTER_ID = "computerId";
-	private static final String PARAM_COMPUTER_NAME = "computerName";
-	private static final String PARAM_COMPUTER_INTRODUCED = "introduced";
-	private static final String PARAM_COMPUTER_DISCONTINUED = "discontinued";
-	private static final String PARAM_COMPANY_ID = "companyId";
-
 	private static final Logger logger = Logger.getLogger(ComputerService.class);
 
 	@Autowired
@@ -44,9 +38,7 @@ public class ComputerService {
 		return mapper.parseToDtosList(computerDao.findAll());
 	}
 
-	public Optional<ComputerDto> getComputerById(HttpServletRequest request){
-		int computerId = Integer.valueOf(request.getParameter(PARAM_COMPUTER_ID));
-
+	public Optional<ComputerDto> getComputerById(int computerId){
 		return computerDao.findById(computerId).map(mapper::parseToDto);
 	}
 
@@ -58,56 +50,65 @@ public class ComputerService {
 		return mapper.parseToDtosList(computerDao.findByCompany(search));
 	}
 
-	public void addComputer(HttpServletRequest request) {
-
-		String computerName = request.getParameter("computerName");
-		String stIntroducedDate = request.getParameter("introduced");
-		String stDiscontinuedDate = request.getParameter("discontinued");
-		Long companyId = Long.valueOf(request.getParameter("companyId"));
-
-		if(checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
-			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
-					.withName(computerName)
-					.withCompanyId(companyId)
-					.withIntroducedDate(stIntroducedDate)
-					.withDiscontinuedDate(stDiscontinuedDate)
-					.build();
-
-			try {
-				computerDao.add(mapper.parseToComputer(computerDto));
-			} catch (DAOException e) {
-				logger.warn("Can not add this computer");
-				e.printStackTrace();
-			} catch (ParseException e) {
-				logger.warn("Can not parse dto to computer");
-				e.printStackTrace();
-			}
+//	public void addComputer(HttpServletRequest request) {
+//
+//		String computerName = request.getParameter("computerName");
+//		String stIntroducedDate = request.getParameter("introduced");
+//		String stDiscontinuedDate = request.getParameter("discontinued");
+//		Long companyId = Long.valueOf(request.getParameter("companyId"));
+//
+//		if(checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
+//			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
+//					.withName(computerName)
+//					.withCompanyId(companyId)
+//					.withIntroducedDate(stIntroducedDate)
+//					.withDiscontinuedDate(stDiscontinuedDate)
+//					.build();
+//
+//			try {
+//				computerDao.add(mapper.parseToComputer(computerDto));
+//			} catch (DAOException e) {
+//				logger.warn("Can not add this computer");
+//				e.printStackTrace();
+//			} catch (ParseException e) {
+//				logger.warn("Can not parse dto to computer");
+//				e.printStackTrace();
+//			}
+//		}
+//		else {
+//			logger.info("Can not add a computer with these informations");
+//		}
+//
+//	}
+	
+	public void addComputer(ComputerDto computerDto) {
+		
+		try{
+			computerDao.add(mapper.parseToComputer(computerDto));
+			
+		}catch (DAOException e) {
+			logger.warn("Can not add this computer");
+			e.printStackTrace();
+		}catch (ParseException e) {
+			logger.warn("Can not parse dto to computer");
+			e.printStackTrace();
 		}
-		else {
-			logger.info("Can not add a computer with these informations");
-		}
-
 	}
 
-	public void updateComputer(HttpServletRequest request) {
+	public void updateComputer(ComputerDto computerDto) {
 
-		int computerId = Integer.valueOf(request.getParameter(PARAM_COMPUTER_ID));
-		String computerName = request.getParameter(PARAM_COMPUTER_NAME);
-		String stIntroducedDate = request.getParameter(PARAM_COMPUTER_INTRODUCED);
-		String stDiscontinuedDate = request.getParameter(PARAM_COMPUTER_DISCONTINUED);
-		Long companyId = Long.valueOf(request.getParameter(PARAM_COMPANY_ID));
-
-		if(checkId(computerId) && checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
-			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
-					.withId(computerId)
-					.withName(computerName)
-					.withCompanyId(companyId)
-					.withIntroducedDate(stIntroducedDate)
-					.withDiscontinuedDate(stDiscontinuedDate)
-					.build();
+//		if(checkId(computerId) && checkName(computerName) && checkDates(stIntroducedDate, stDiscontinuedDate) && checkCompanyId(companyId)) {
+//			ComputerDto computerDto = new ComputerDto.ComputerDtoBuilder()
+//					.withId(computerId)
+//					.withName(computerName)
+//					.withCompanyId(companyId)
+//					.withIntroducedDate(stIntroducedDate)
+//					.withDiscontinuedDate(stDiscontinuedDate)
+//					.build();
 
 			try {
 				computerDao.update(mapper.parseToComputer(computerDto));
+				
 			} catch (DAOException e) {
 				logger.warn("Can not update this computer");
 				e.printStackTrace();
@@ -115,17 +116,13 @@ public class ComputerService {
 				logger.warn("Can not parse dto to computer");
 				e.printStackTrace();
 			}
-		}
-		else {
-			logger.info("Can not update a computer with these informations");
-		}
-
 	}
 
 	public void deleteComputer(Integer computerId) {
 		
 		try {
 			computerDao.delete(new Computer.ComputerBuilder().withId(computerId).build());
+			
 		}catch (DAOException e) {
 			logger.warn("Can not delete this computer");
 			e.printStackTrace();

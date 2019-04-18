@@ -35,11 +35,11 @@ public class ComputerMapper {
 				.build();
 		
 		if(cpu.getIntroducedDate().isPresent()) {
-			dto.setIntroducedDate(cpu.getIntroducedDate().toString());
+			dto.setIntroducedDate(cpu.getIntroducedDate().get().toString());
 		}
 		
 		if(cpu.getDiscontinuedDate().isPresent()) {
-			dto.setDiscontinuedDate(cpu.getDiscontinuedDate().toString());
+			dto.setDiscontinuedDate(cpu.getDiscontinuedDate().get().toString());
 		}
 
 		return dto;

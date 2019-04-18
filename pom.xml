@@ -19,7 +19,7 @@
 		<jquery.version>3.3.1-2</jquery.version>
 		<hikari.version>3.3.1</hikari.version>
 		<spring-context.version>5.1.6.RELEASE</spring-context.version>
-		<spring-web.version>5.1.6.RELEASE</spring-web.version>
+		<spring-webmvc.version>5.1.6.RELEASE</spring-webmvc.version>
 		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
 		<spring-jdbc.version>5.1.6.RELEASE</spring-jdbc.version>
 		<h2.version>1.4.199</h2.version>
@@ -88,15 +88,8 @@
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-context.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring-web.version}</version>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-webmvc.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-boot -->

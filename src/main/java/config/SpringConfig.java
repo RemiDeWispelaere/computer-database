@@ -8,11 +8,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
+@EnableWebMvc
 @Configuration
 @ComponentScan("main.java.dao")
 @ComponentScan("main.java.dto")
 @ComponentScan("main.java.service")
+@ComponentScan("main.java.controller")
 @PropertySource("classpath:dao.properties")
 public class SpringConfig {
 
@@ -34,5 +40,16 @@ public class SpringConfig {
 								.password(password)
 								.build();
 		
+	}
+	
+	@Bean
+	public ViewResolver viewResolver() {
+		InternalResourceViewResolver bean = new InternalResourceViewResolver();
+		
+		bean.setViewClass(JstlView.class);
+		bean.setPrefix("/WEB-INF/views/");
+		bean.setSuffix(".jsp");
+		
+		return bean;
 	}
 }

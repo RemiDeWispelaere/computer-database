@@ -20,7 +20,7 @@
 	<section id="main">
 		<div class="container">
 			<h1>List of computers</h1>
-			<h3 id="homeTitle">${pageManager.getLength() } computer(s) found</h3>
+			<h3 id="homeTitle">${ nbOfComputers } computer(s) found</h3>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="ListComputer" method="GET" class="form-inline">
@@ -82,9 +82,8 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${cpu.id }"></td>
 							<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
-							<td>${ cpu.introducedDate.toString().substring(9, 19)}</td>
-							<!-- substring pour clean l'affichage du optional -->
-							<td>${ cpu.discontinuedDate.toString().substring(9, 19)}</td>
+							<td>${ cpu.introducedDate}</td>
+							<td>${ cpu.discontinuedDate}</td>
 							<td>${ cpu.companyName }</td>
 
 						</tr>
