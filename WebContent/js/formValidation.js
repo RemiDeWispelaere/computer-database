@@ -14,7 +14,7 @@ jQuery.validator.addMethod(
 
 $("#addForm").validate({
 	rules : {
-		discontinued : {
+		discontinuedDate : {
 			greaterThan: "#introduced"
 		}
 	}
@@ -22,7 +22,7 @@ $("#addForm").validate({
 
 $("#editForm").validate({
 	rules : {
-		discontinued : {
+		discontinuedDate : {
 			greaterThan: "#introduced"
 		}
 	}
