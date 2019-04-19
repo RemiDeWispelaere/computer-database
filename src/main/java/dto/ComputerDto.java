@@ -163,7 +163,7 @@ public class ComputerDto {
 	////////TO STRING////////
 
 	public String toString() {
-		String ret = "\n -Computer-\n" 
+		String ret = "\n -Computer Dto-\n" 
 				+ "| id : " + this.getId() + "\n"
 				+ "| name : " + this.getName() + "\n"
 				+ "| company : " + this.getCompanyName() + "\n"

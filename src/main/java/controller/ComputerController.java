@@ -167,6 +167,6 @@ public class ComputerController {
 		
 		computerService.updateComputer(computerDto);
 		
-		return PAGE_EDIT_COMPUTER;
+		return PAGE_LIST_COMPUTER;
 	}
 }

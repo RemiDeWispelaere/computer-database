@@ -10,6 +10,7 @@
     	<servlet-name>default</servlet-name>
     	<url-pattern>*.css</url-pattern>
     	<url-pattern>*.js</url-pattern>
+    	<url-pattern>*.png</url-pattern>
     </servlet-mapping>
     
 	<jsp-config>
@@ -18,4 +19,5 @@
 			<include-prelude>/WEB-INF/views/taglibs.jsp</include-prelude>
 		</jsp-property-group>
 	</jsp-config>
+	
 </web-app>
