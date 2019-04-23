@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="label.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -12,29 +14,28 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="ListComputer"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="ListComputer"><spring:message code="label.title"/> </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1>List of computers</h1>
-			<h3 id="homeTitle">${ nbOfComputers } computer(s) found</h3>
+			<h1><spring:message code="label.heading"/></h1>
+			<h3 id="homeTitle">${ nbOfComputers } <spring:message code="label.cpuFound"/></h3>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="ListComputer" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> 
-						<input type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+						<input type="submit" id="searchsubmit" class="btn btn-primary"><spring:message code="label.search"/></>
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="AddComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="AddComputer">
+					<spring:message code="label.add"/></a> 
+					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+					<spring:message code="label.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -57,7 +58,7 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name
+						<th><spring:message code="label.cpuName"/>
 						<c:choose>
 						<c:when test="${ sort == 'nameDesc' }">
 							<a class="pull-right" href="?startIndex=${ pageManager.getIndex() }&search=${ search }&sort=nameAsc"><i class="fa fa-sort-desc"></i></a>
@@ -67,11 +68,11 @@
 						</c:otherwise>
 						</c:choose>
 						</th>
-						<th>Introduced date</th>
+						<th><spring:message code="label.introDate"/></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><spring:message code="label.disconDate"/></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><spring:message code="label.company"/></th>
 
 					</tr>
 				</thead>

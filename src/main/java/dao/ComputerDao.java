@@ -253,8 +253,8 @@ public class ComputerDao implements DAOUtilitaire{
 
 	///////// MAPPING////////
 
-	private class MapComputer implements RowMapper<Computer>{
-
+	class MapComputer implements RowMapper<Computer>{
+		
 		@Override
 		public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 
