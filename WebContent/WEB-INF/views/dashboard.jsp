@@ -15,6 +15,8 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="ListComputer"><spring:message code="label.title"/> </a>
+			<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=fr"><img class="flag flag-fr"></a>
+			<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=en"><img class="flag flag-en"></a>
 		</div>
 	</header>
 
@@ -28,14 +30,14 @@
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> 
-						<input type="submit" id="searchsubmit" class="btn btn-primary"><spring:message code="label.search"/></>
+						<input type="submit" id="searchsubmit" class="btn btn-primary" value="<spring:message code="label.searchBtn"/>"/>
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="AddComputer">
-					<spring:message code="label.add"/></a> 
+					<spring:message code="label.addBtn"/></a> 
 					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
-					<spring:message code="label.edit"/></a>
+					<spring:message code="label.editBtn"/></a>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-    <title>Computer Database</title>
+    <title><spring:message code="label.title"/></title>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">
@@ -15,9 +17,9 @@
 			<div class="notfound-404">
 				<h1>4<span></span>4</h1>
 			</div>
-			<h2>Oops! Page Not Be Found</h2>
-			<p>Sorry but the page you are looking for does not exist, have been removed. name changed or is temporarily unavailable</p>
-			<a href="ListComputer">Back to homepage</a>
+			<h2><spring:message code="error.404heading"/></h2>
+			<p><spring:message code="error.404msg"/></p>
+			<a href="ListComputer"><spring:message code="error.backHomeBtn"/></a>
 		</div>
 	</div>
 	
