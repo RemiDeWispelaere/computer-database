@@ -28,7 +28,7 @@ public class ComputerDao implements DAOUtilitaire{
 	private static final String SQL_SEARCH_BY_NAME = "FROM Computer WHERE name LIKE :name";
 	private static final String SQL_INSERT = "INSERT INTO Computer (name, company_id, introduced, discontinued) VALUES (:name, :companyId, :introducedDate, :discontinuedDate)";
 	private static final String SQL_UPDATE = "UPDATE Computer SET name = :name, company_id = :companyId, introduced = :introducedDate, discontinued = :discontinuedDate WHERE id = :id";
-	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = :id";
+	private static final String SQL_DELETE = "DELETE FROM Computer WHERE id = :id";
 
 	private static final Logger logger = Logger.getLogger(ComputerDao.class);
 	
@@ -83,7 +83,7 @@ public class ComputerDao implements DAOUtilitaire{
 
 		try {
 			Session session = sessionFactory.openSession();
-			computer = (Computer) session.get(Computer.class, id);
+			computer = session.get(Computer.class, id);
 
 //			logger.info("Access to the data base : " + SQL_FIND_BY_ID + " (" + id + ")");
 

@@ -31,7 +31,7 @@ public class ComputerMapper {
 				.withId(cpu.getId())
 				.withName(cpu.getName())
 				.withCompanyId(cpu.getCompanyId())
-				.withCompanyName(companyDao.findById(cpu.getCompanyId()).orElse(new Company(0, "")).getName())
+				.withCompanyName(companyDao.findById(cpu.getCompanyId()).orElse(new Company(0L, "")).getName())
 				.build();
 		
 		if(cpu.getIntroducedDate().isPresent()) {

@@ -3,6 +3,7 @@ package main.java.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,28 +13,26 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="COMPANY")
+@Table(name="company")
 public class Company {
 
 	@Id
-	@GeneratedValue
-	private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(name="name")
 	private String name;
 
 	/////////////CONSTRUCTOR///////////////
 
-	public Company() {
-
-	}
+	public Company() {}
 
 	/**
 	 * Standard constructor
 	 * @param nId The company's Id
 	 * @param nName The company's Name
 	 */
-	public Company(int nId, String nName) {	
+	public Company(Long nId, String nName) {	
 		this.id = nId;
 		this.name = nName;
 	}
@@ -45,7 +44,7 @@ public class Company {
 	 * Set the company's Id
 	 * @param nId The new company's Id
 	 */
-	public void setId(int nId) {
+	public void setId(Long nId) {
 		this.id = nId;
 	}
 
@@ -53,7 +52,7 @@ public class Company {
 	 * Get the company's Id
 	 * @return The current company's Id
 	 */
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -13,17 +11,17 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -34,12 +32,13 @@ import org.springframework.web.servlet.view.JstlView;
 import main.java.model.Company;
 import main.java.model.Computer;
 
-@EnableWebMvc
 @Configuration
-@ComponentScan("main.java.dao")
-@ComponentScan("main.java.dto")
-@ComponentScan("main.java.service")
-@ComponentScan("main.java.controller")
+@ComponentScan(
+		basePackages = {"main.java.dao",
+						"main.java.dto",
+						"main.java.service",
+						"main.java.controller"}, 
+		excludeFilters = { @Filter(type = FilterType.ANNOTATION, value = Configuration.class) })
 @PropertySource("classpath:dao.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
@@ -51,17 +50,6 @@ public class SpringConfig implements WebMvcConfigurer {
 	String userDb;
 	@Value("${password}")
 	String password;
-	
-	@Bean
-	public DataSource getDataSource() {
-		return DataSourceBuilder.create()
-								.url(url)
-								.driverClassName(driver)
-								.username(userDb)
-								.password(password)
-								.build();
-		
-	}
 	
 	@Bean
 	public SessionFactory getSessionFactory() {

@@ -2,7 +2,7 @@ package main.java.dto;
 
 public class CompanyDto {
 
-	private int id;
+	private Long id;
 	private String name;
 
 	/////////////CONSTRUCTOR///////////////
@@ -16,7 +16,7 @@ public class CompanyDto {
 	 * @param nId The company's Id
 	 * @param nName The company's Name
 	 */
-	public CompanyDto(int nId, String nName) {	
+	public CompanyDto(Long nId, String nName) {	
 		this.id = nId;
 		this.name = nName;
 	}
@@ -28,7 +28,7 @@ public class CompanyDto {
 	 * Set the company's Id
 	 * @param nId The new company's Id
 	 */
-	public void setId(int nId) {
+	public void setId(Long nId) {
 		this.id = nId;
 	}
 
@@ -36,7 +36,7 @@ public class CompanyDto {
 	 * Get the company's Id
 	 * @return The current company's Id
 	 */
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 

@@ -37,9 +37,7 @@ public class Computer {
 
 	/////////////CONSTRUCTOR///////////////
 	
-	public Computer() {
-		
-	}
+	public Computer() {}
 
 	public Computer(ComputerBuilder builder) {
 		this.id = builder.id;
