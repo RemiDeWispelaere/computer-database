@@ -1,13 +1,25 @@
 package main.java.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * The representation of a company in the DB
  * @author DE WISPELAERE Rémi
  *
  */
+@Entity
+@Table(name="COMPANY")
 public class Company {
 
+	@Id
+	@GeneratedValue
 	private int id;
+	
+	@Column(name="name")
 	private String name;
 
 	/////////////CONSTRUCTOR///////////////

@@ -1,22 +1,45 @@
 package main.java.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Optional;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * The representation of a computer in the DB
  * @author DE WISPELAERE Rémi
  *
  */
+@Entity
+@Table(name="computer")
 public class Computer {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="company_id")
 	private Long companyId;
+	
+	@Column(name="introduced")
 	private Date introducedDate;
+	
+	@Column(name="discontinued")
 	private Date discontinuedDate;
 
 	/////////////CONSTRUCTOR///////////////
+	
+	public Computer() {
+		
+	}
 
 	public Computer(ComputerBuilder builder) {
 		this.id = builder.id;

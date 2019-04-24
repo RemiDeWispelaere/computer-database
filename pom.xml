@@ -23,6 +23,7 @@
 		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
 		<spring-jdbc.version>5.1.6.RELEASE</spring-jdbc.version>
 		<h2.version>1.4.199</h2.version>
+		<hibernate.version>5.4.1.Final</hibernate.version>
 	</properties>
 
 	<dependencies>
@@ -113,6 +114,14 @@
 			<version>${h2.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-hikaricp -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-hikaricp</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
 
 
 	</dependencies>
