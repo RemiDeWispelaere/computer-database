@@ -1,25 +1,18 @@
 package main.java.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import main.java.model.Computer;
@@ -38,10 +31,7 @@ public class ComputerDao implements DAOUtilitaire{
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = :id";
 
 	private static final Logger logger = Logger.getLogger(ComputerDao.class);
-
-	@Autowired
-	private DataSource dataSource;
-
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -54,22 +44,7 @@ public class ComputerDao implements DAOUtilitaire{
 			throw new DAOException("Failure to create the new computer, no line added");
 		}
 
-		try {
-//			MapSqlParameterSource params = new MapSqlParameterSource();
-//			params.addValue("name", computer.getName());
-//			params.addValue("companyId", computer.getCompanyId());
-//			params.addValue("introducedDate", computer.getIntroducedDate().orElse(null));
-//			params.addValue("discontinuedDate", computer.getDiscontinuedDate().orElse(null));
-//
-//			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-//			jdbcTemplate.update(SQL_INSERT, params);
-//
-//			logger.info("Access to the data base : " + SQL_INSERT + "("
-//					+ computer.getName() + "," 
-//					+ computer.getCompanyId() + ","
-//					+ computer.getIntroducedDate().orElse(null) + ","
-//					+ computer.getDiscontinuedDate().orElse(null) + ")");
-			
+		try {			
 			Session session = sessionFactory.openSession();
 			session.save(computer);
 
@@ -88,7 +63,7 @@ public class ComputerDao implements DAOUtilitaire{
 		}
 	}
 
-	public List<Computer> findAll() {
+	public List<Computer> findAll() throws DAOException {
 
 		//			logger.info("Access to the data base : " + SQL_FIND_ALL);
 
@@ -192,23 +167,26 @@ public class ComputerDao implements DAOUtilitaire{
 			logger.warn("Failure to update the computer");
 			throw new DAOException("Failure to update the computer");
 		}
+		//"UPDATE Computer SET name = :name, company_id = :companyId, introduced = :introducedDate, discontinued = :discontinuedDate WHERE id = :id";
 
 		try {
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("id", computer.getId());
-			params.addValue("name", computer.getName());
-			params.addValue("companyId", computer.getCompanyId());
-			params.addValue("introducedDate", computer.getIntroducedDate().orElse(null));
-			params.addValue("discontinuedDate", computer.getDiscontinuedDate().orElse(null));
+			Session session = sessionFactory.openSession();
+			Query query = session.createQuery(SQL_UPDATE)
+				.setParameter("id", computer.getId())
+				.setParameter("name", computer.getName())
+				.setParameter("companyId", computer.getCompanyId())
+				.setParameter("introducedDate", computer.getIntroducedDate().orElse(null))
+				.setParameter("discontinuedDate", computer.getDiscontinuedDate().orElse(null));
+			
+			Transaction transaction = session.beginTransaction();
+			query.executeUpdate();
+			transaction.commit();
 
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-			jdbcTemplate.update(SQL_UPDATE, params);
-
-			logger.info("Access to the data base : " + SQL_UPDATE + "("
-					+ computer.getName() + "," 
-					+ computer.getCompanyId() + ","
-					+ computer.getIntroducedDate().orElse(null) + ","
-					+ computer.getDiscontinuedDate().orElse(null) + ")");
+//			logger.info("Access to the data base : " + SQL_UPDATE + "("
+//					+ computer.getName() + "," 
+//					+ computer.getCompanyId() + ","
+//					+ computer.getIntroducedDate().orElse(null) + ","
+//					+ computer.getDiscontinuedDate().orElse(null) + ")");
 
 
 		} catch(EmptyResultDataAccessException e) {
@@ -237,14 +215,13 @@ public class ComputerDao implements DAOUtilitaire{
 		}
 
 		try {
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("id", computer.getId());
+			Session session = sessionFactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			session.delete(computer);
+			transaction.commit();
 
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-			jdbcTemplate.update(SQL_DELETE, params);
-
-
-			logger.info("Access to the data base : " + SQL_DELETE + "(" + computer.getId() + ")");
+//			logger.info("Access to the data base : " + SQL_DELETE + "(" + computer.getId() + ")");
+			
 		} catch(EmptyResultDataAccessException e) {
 			logger.warn("No computer with the id " + computer.getId() + " found");
 
@@ -261,25 +238,6 @@ public class ComputerDao implements DAOUtilitaire{
 					+ computer.getIntroducedDate().orElse(null) + ","
 					+ computer.getDiscontinuedDate().orElse(null) + ")");
 
-		}
-	}
-
-	///////// MAPPING////////
-
-	class MapComputer implements RowMapper<Computer>{
-
-		@Override
-		public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-
-			Computer computer = new Computer.ComputerBuilder().build();
-
-			computer.setId(resultSet.getInt("id"));
-			computer.setName(resultSet.getString("name"));
-			computer.setCompanyId((Long) resultSet.getObject("company_id"));
-			computer.setIntroducedDate(resultSet.getDate("introduced"));
-			computer.setDiscontinuedDate(resultSet.getDate("discontinued"));
-
-			return computer;
 		}
 	}
 
