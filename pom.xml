@@ -4,26 +4,35 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>computer-database</groupId>
-	<artifactId>computer-database</artifactId>
+	<artifactId>computer-database-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>computer-database</name>
+	<packaging>pom</packaging>
+	<name>computer-database-parent</name>
+	
+	<modules>
+		<module>cdb-binding</module>
+		<module>cdb-console</module>
+		<module>cdb-core</module>
+		<module>cdb-persistence</module>
+		<module>cdb-service</module>
+		<module>cdb-webapp</module>
+	</modules>
 
 	<properties>
-		<mysql-connector-java.version>5.1.6</mysql-connector-java.version>
+			<mysql-connector-java.version>5.1.6</mysql-connector-java.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.25.1</mockito.version>
 		<log4j.version>1.2.17</log4j.version>
-		<javax-servlet.version>3.1.0</javax-servlet.version>
-		<jstl.version>1.2</jstl.version>
-		<jquery.version>3.3.1-2</jquery.version>
-		<hikari.version>3.3.1</hikari.version>
+			<javax-servlet.version>3.1.0</javax-servlet.version>
+			<jstl.version>1.2</jstl.version>
+			<jquery.version>3.3.1-2</jquery.version>
+			<hikari.version>3.3.1</hikari.version>
 		<spring-context.version>5.1.6.RELEASE</spring-context.version>
 		<spring-webmvc.version>5.1.6.RELEASE</spring-webmvc.version>
 		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
 		<spring-jdbc.version>5.1.6.RELEASE</spring-jdbc.version>
-		<h2.version>1.4.199</h2.version>
-		<hibernate.version>5.4.1.Final</hibernate.version>
+			<h2.version>1.4.199</h2.version>
+			<hibernate.version>5.4.1.Final</hibernate.version>
 	</properties>
 
 	<dependencies>
