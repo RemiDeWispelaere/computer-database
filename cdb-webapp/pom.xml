@@ -12,12 +12,52 @@
 	<artifactId>cdb-webapp</artifactId>
 	<packaging>war</packaging>
 	<name>cdb-webapp</name>
-	
+
+	<properties>
+		<javax-servlet.version>3.1.0</javax-servlet.version>
+		<jquery.version>3.3.1-2</jquery.version>
+		<hikari.version>3.3.1</hikari.version>
+		<h2.version>1.4.199</h2.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>cdb-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax-servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>${jquery.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikari.version}</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 </project>

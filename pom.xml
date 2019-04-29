@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>computer-database-parent</name>
-	
+
 	<modules>
 		<module>cdb-binding</module>
 		<module>cdb-console</module>
@@ -17,123 +17,6 @@
 		<module>cdb-service</module>
 		<module>cdb-webapp</module>
 	</modules>
-
-	<properties>
-			<mysql-connector-java.version>5.1.6</mysql-connector-java.version>
-		<junit.version>4.12</junit.version>
-		<mockito.version>2.25.1</mockito.version>
-		<log4j.version>1.2.17</log4j.version>
-			<javax-servlet.version>3.1.0</javax-servlet.version>
-			<jstl.version>1.2</jstl.version>
-			<jquery.version>3.3.1-2</jquery.version>
-			<hikari.version>3.3.1</hikari.version>
-		<spring-context.version>5.1.6.RELEASE</spring-context.version>
-		<spring-webmvc.version>5.1.6.RELEASE</spring-webmvc.version>
-		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
-		<spring-jdbc.version>5.1.6.RELEASE</spring-jdbc.version>
-			<h2.version>1.4.199</h2.version>
-			<hibernate.version>5.4.1.Final</hibernate.version>
-	</properties>
-
-	<dependencies>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector-java.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax-servlet.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-			<version>${jquery.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikari.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring-webmvc.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-boot -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-			<version>${spring-boot.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-jdbc.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-hikaricp -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-hikaricp</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-
-
-	</dependencies>
 
 	<build>
 		<plugins>

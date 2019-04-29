@@ -12,7 +12,7 @@
 	<artifactId>cdb-persistence</artifactId>
 	<packaging>jar</packaging>
 	<name>cdb-persistence</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>computer-database</groupId>
@@ -20,5 +20,5 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	
+
 </project>
