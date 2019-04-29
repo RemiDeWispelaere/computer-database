@@ -26,8 +26,8 @@ import com.rdewispelaere.model.Company;
 		basePackages = {"com.rdewispelaere.dao",
 						"com.rdewispelaere.dto",
 						"com.rdewispelaere.service",
-						"com.rdewispelaere.controller"}, 
-		excludeFilters = { @Filter(type = FilterType.ANNOTATION, value = Configuration.class) })
+						"com.rdewispelaere.controller",
+						"com.rdewispelaere.webconfig"})
 public class DaoConfig {
 
 	@Value("${url}")
