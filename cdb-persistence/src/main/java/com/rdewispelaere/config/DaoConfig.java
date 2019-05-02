@@ -12,13 +12,12 @@ import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import com.rdewispelaere.model.Computer;
+import com.rdewispelaere.model.Role;
+import com.rdewispelaere.model.User;
 import com.rdewispelaere.model.Company;
 
 @PropertySource("classpath:dao.properties")
@@ -55,7 +54,9 @@ public class DaoConfig {
 		
 		MetadataSources sources = new MetadataSources(registry)
 				.addAnnotatedClass(Computer.class)
-				.addAnnotatedClass(Company.class);
+				.addAnnotatedClass(Company.class)
+				.addAnnotatedClass(User.class)
+				.addAnnotatedClass(Role.class);
 		
 		Metadata metadata = sources.getMetadataBuilder().build();
 		SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();

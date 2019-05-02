@@ -197,11 +197,6 @@ public class Computer {
 
 		public Computer build() {
 			Computer computer = new Computer(this);
-			computer.setId(this.id);
-			computer.setName(this.name);
-			computer.setIntroducedDate(this.introducedDate);
-			computer.setDiscontinuedDate(this.discontinuedDate);
-			computer.setCompanyId(this.companyId);
 			return computer;
 		}
 	}
