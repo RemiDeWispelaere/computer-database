@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.rdewispelaere.dto.CompanyDto;
 import com.rdewispelaere.dto.ComputerDto;
 import com.rdewispelaere.model.PageManager;
+import com.rdewispelaere.model.User;
 import com.rdewispelaere.service.CompanyService;
 import com.rdewispelaere.service.ComputerService;
+import com.rdewispelaere.service.UserService;
 
 @Controller
 public class ComputerController {
 
+	private static final String PAGE_LOGIN = "login";
 	private static final String PAGE_LIST_COMPUTER = "dashboard";
 	private static final String PAGE_EDIT_COMPUTER = "editComputer";
 	private static final String PAGE_ADD_COMPUTER = "addComputer";
@@ -42,13 +45,33 @@ public class ComputerController {
 	private ComputerService computerService;
 	@Autowired
 	private CompanyService companyService;
+	@Autowired
+	private UserService userService;
 	
 	@ModelAttribute
 	public ComputerDto initComputerDto() {
 		return new ComputerDto.ComputerDtoBuilder().build();
 	}
+	@ModelAttribute
+	public User initUser() {
+		return new User();
+	}
 	
-	@GetMapping({"/", "/ListComputer"})
+	@GetMapping("/")
+	public String getLogin(Model model) {
+		
+		model.addAttribute(PARAM_LIST_COMPANIES, companyService.getAllCompanies());
+		
+		return PAGE_LOGIN;
+	}
+	
+	@PostMapping("/")
+	public String postLogin(@ModelAttribute("user")User user, BindingResult result) {
+		
+		return "redirect:/ListComputer";
+	}
+	
+	@GetMapping("/ListComputer")
 	public String getListComputer(@RequestParam(required = false) Map<String, String> params, Model model) {
 		
 		String stStartIndex = (params.containsKey(PARAM_START_INDEX) && !params.get(PARAM_START_INDEX).contentEquals("")) ? params.get(PARAM_START_INDEX) : "";
