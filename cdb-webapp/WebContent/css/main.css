@@ -28,11 +28,40 @@ input[type='checkbox'] {
     white-space: nowrap;
 }
 
+.main-navbar {
+	height: 50px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.navbar-title {
+	line-height: 40px;
+	padding-top : 0px;
+	padding-right : 0px;
+	padding-bottom : 0px;
+	padding-left : 0px;
+}
+
+.navbar-actions {
+	position: absolute;
+	height: 40px;
+	right: 7px;
+	align-items: center;
+}
+
+.navbar-logout-btn {
+	height: 30px;
+	justify-content: center;
+  	align-items: center;
+  	padding: 6px 20px;
+}
+
 .flag {
     display: inline-block;
     width: 32px;
     height: 32px;
     background: url('../img/flags.png') no-repeat;
+    border: 0px;
 }
 
 

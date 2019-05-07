@@ -12,11 +12,14 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
+	<header class="navbar navbar-inverse navbar-fixed-top main-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="ListComputer"><spring:message code="label.title"/> </a>
-			<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=fr"><img class="flag flag-fr"></a>
-			<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=en"><img class="flag flag-en"></a>
+			<a class="navbar-brand navbar-title" href="ListComputer"><spring:message code="label.title"/> </a>
+			<div class="navbar-actions">
+				<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=fr"><img class="flag flag-fr"></a>
+				<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=en"><img class="flag flag-en"></a>
+				<a class="btn btn-default navbar-logout-btn"><spring:message code="label.logout"/></a>
+			</div>
 		</div>
 	</header>
 
