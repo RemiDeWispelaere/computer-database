@@ -55,7 +55,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="label.editBtn"/>" class="btn btn-primary">
+							<input type="submit" value="<spring:message code="label.validateBtn"/>" class="btn btn-primary">
 							<a href="ListComputer" class="btn btn-default"><spring:message code="label.cancelBtn"/></a>
 						</div>
 					</form:form>

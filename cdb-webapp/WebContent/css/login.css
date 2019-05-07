@@ -211,6 +211,7 @@ iframe {
 }
 .login100-form-avatar img {
   width: 100%;
+  background: #fff;
 }
 
 
@@ -354,11 +355,6 @@ iframe {
   border-radius: 25px;
   top: 0;
   left: 0;
-  background: #005bea;
-  background: -webkit-linear-gradient(left, #005bea, #00c6fb);
-  background: -o-linear-gradient(left, #005bea, #00c6fb);
-  background: -moz-linear-gradient(left, #005bea, #00c6fb);
-  background: linear-gradient(left, #005bea, #00c6fb);
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -373,6 +369,19 @@ iframe {
 
 .login100-form-btn:hover:before {
   opacity: 1;
+}
+
+.register-form-btn {
+	width: 45%;
+	text-decoration: none;
+}
+
+.register-form-btn-validate:hover {
+	background: #69c667;
+}
+
+.register-form-btn-cancel:hover {
+	background: #c67867;
 }
 
 /*------------------------------------------------------------------

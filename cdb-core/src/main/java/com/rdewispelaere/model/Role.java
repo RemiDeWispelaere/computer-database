@@ -7,6 +7,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,8 +20,9 @@ public class Role {
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "username")
-	private String username;
+	@ManyToOne
+	@JoinColumn(name = "username")
+	private User user;
 
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
@@ -34,8 +37,8 @@ public class Role {
 
 	public Role() {}
 
-	public Role(String nUsername, UserRole nRole) {
-		this.username = nUsername;
+	public Role(User nUsername, UserRole nRole) {
+		this.user = nUsername;
 		this.role = nRole;
 	}
 	
@@ -51,12 +54,12 @@ public class Role {
 	}
 	
 	//USERNAME
-	public void setUsername(String nUsername) {
-		this.username = nUsername;
+	public void setUser(User nUser) {
+		this.user = nUser;
 	}
 	
-	public String getUsername() {
-		return this.username;
+	public User getUser() {
+		return this.user;
 	}
 	
 	//ROLE
@@ -64,7 +67,7 @@ public class Role {
 		this.role = nRole;
 	}
 	
-	public UserRole getRole() {
-		return this.role;
+	public String getRole() {
+		return this.role.name();
 	}
 }

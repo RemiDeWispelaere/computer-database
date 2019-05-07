@@ -26,7 +26,7 @@ public class AuthenticationProvider extends DaoAuthenticationProvider {
 		UserDetails user = userService.loadUserByUsername(name);
 		
 		if(user == null) {
-			throw new BadCredentialsException("Username/Password doas not math for " + auth.getPrincipal());
+			throw new BadCredentialsException("Username/Password doas not match for " + auth.getPrincipal());
 		}
 		
 		return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

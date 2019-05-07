@@ -11,8 +11,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rdewispelaere.dao.DAOException;
 import com.rdewispelaere.dao.UserDao;
 import com.rdewispelaere.model.Role;
 import com.rdewispelaere.model.User;
@@ -22,15 +24,19 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDao userDao;
-
-	//	@Autowired
-	//	public UserService(UserDao userDao) {
-	//		this.userDao = userDao;
-	//	}
+	
+	public void registerUser(User user) throws DAOException {
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		user.setUsername(user.getUsername().trim());
+		Role role = new Role();
+		role.setUser(user);
+		role.setRole(Role.UserRole.ROLE_USER);
+		this.userDao.add(user, role);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-
+		
 		if(name == null) {
 			throw new IllegalArgumentException("User name can't be null");
 		}
@@ -43,7 +49,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	private org.springframework.security.core.userdetails.User buildUserForAuthentication(User user, List<GrantedAuthority> roles) {
-		return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), true, true, true, true, roles);
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, true, true, roles);
 	}
 
 	private List<GrantedAuthority> buildUserRoles(Set<Role> roles){
@@ -51,9 +57,9 @@ public class UserService implements UserDetailsService {
 		Set<GrantedAuthority> setRoles = new HashSet<GrantedAuthority>();
 
 		for(Role role : roles) {
-			setRoles.add(new SimpleGrantedAuthority(role.getRole().name()));
+			setRoles.add(new SimpleGrantedAuthority(role.getRole()));
 		}
-		
+
 		return new ArrayList<GrantedAuthority>(setRoles);
 	}
 }

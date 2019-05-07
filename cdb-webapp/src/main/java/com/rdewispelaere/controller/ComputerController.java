@@ -133,7 +133,7 @@ public class ComputerController {
 
 		computerService.addComputer(computerDto);
 		
-		return "redirect:/";
+		return "redirect:/ListComputer";
 	}
 	
 	@GetMapping("/EditComputer")
