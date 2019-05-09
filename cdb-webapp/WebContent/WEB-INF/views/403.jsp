@@ -19,7 +19,7 @@
 			</div>
 			<h2><spring:message code="error.403heading"/></h2>
 			<p><spring:message code="error.403msg"/></p>
-			<a href="ListComputer"><spring:message code="error.backHomeBtn"/></a>
+			<a href="javascript:history.back()"><spring:message code="error.backBtn"/></a>
 		</div>
 	</div>
 	

@@ -16,6 +16,7 @@ public class UserController {
 
 	private static final String PAGE_LOGIN = "login";
 	private static final String PAGE_REGISTER = "register";
+	private static final String PAGE_REGISTER_ADMIN = "registerAdmin";
 	private static final String PAGE_ERROR_500 = "500";
 
 	@Autowired
@@ -44,8 +45,26 @@ public class UserController {
 			return PAGE_ERROR_500;
 		}
 		
-		userService.registerUser(user);
+		userService.registerAsUser(user);
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/RegisterAdmin")
+	public String getRegisterAdmin(Model model) {
+		return PAGE_REGISTER_ADMIN;
+	}
+	
+	@PostMapping("/RegisterAdmin")
+	public String postRegisterAdmin(@ModelAttribute("user")User admin, BindingResult result, Model model) {
+		
+		if(result.hasErrors()) {
+			//TODO
+			return PAGE_ERROR_500;
+		}
+		
+		userService.registerAsUser(admin);
+		
+		return "redirect:/ListComputer";
 	}
 }

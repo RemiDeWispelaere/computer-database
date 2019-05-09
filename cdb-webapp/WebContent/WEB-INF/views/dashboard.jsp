@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <html>
 <head>
 <title><spring:message code="label.title"/></title>
@@ -18,7 +20,10 @@
 			<div class="navbar-actions">
 				<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=fr"><img class="flag flag-fr"></a>
 				<a href="ListComputer?startIndex=${ pageManager.index }&search=${ search }&sort=${ sort }&lang=en"><img class="flag flag-en"></a>
-				<a class="btn btn-default navbar-logout-btn"><spring:message code="label.logout"/></a>
+				<sec:authorize access="hasRole('ADMIN')">
+					<a href="RegisterAdmin" class="btn btn-default navbar-logout-btn"><spring:message code="label.createAdmin"/></a>
+				</sec:authorize>
+				<a href="logout" class="btn btn-default navbar-logout-btn"><spring:message code="label.logout"/></a>
 			</div>
 		</div>
 	</header>
@@ -36,12 +41,14 @@
 						<input type="submit" id="searchsubmit" class="btn btn-primary" value="<spring:message code="label.searchBtn"/>"/>
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="AddComputer">
-					<spring:message code="label.addBtn"/></a> 
-					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
-					<spring:message code="label.editBtn"/></a>
-				</div>
+				<sec:authorize access="hasRole('ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer" href="AddComputer">
+						<spring:message code="label.addBtn"/></a> 
+						<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+						<spring:message code="label.editBtn"/></a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 
@@ -87,7 +94,14 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${cpu.id }"></td>
-							<td><a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a></td>
+							<td>
+								<sec:authorize access="hasRole('ADMIN')">
+									<a href="EditComputer?computerId=${cpu.id }" onclick="">${cpu.name}</a>
+								</sec:authorize>
+								<sec:authorize access="hasRole('USER')">
+									${cpu.name}
+								</sec:authorize>
+							</td>
 							<td>${ cpu.introducedDate}</td>
 							<td>${ cpu.discontinuedDate}</td>
 							<td>${ cpu.companyName }</td>

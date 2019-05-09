@@ -25,12 +25,20 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserDao userDao;
 	
-	public void registerUser(User user) throws DAOException {
+	public void registerAsUser(User user) throws DAOException {
+		register(user, Role.UserRole.ROLE_USER);
+	}
+	
+	public void registerAsAdmin(User user) throws DAOException {
+		register(user, Role.UserRole.ROLE_ADMIN);
+	}
+	
+	private void register(User user, Role.UserRole userRole)  throws DAOException {
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		user.setUsername(user.getUsername().trim());
 		Role role = new Role();
 		role.setUser(user);
-		role.setRole(Role.UserRole.ROLE_USER);
+		role.setRole(userRole);
 		this.userDao.add(user, role);
 	}
 
@@ -39,6 +47,7 @@ public class UserService implements UserDetailsService {
 		
 		if(name == null) {
 			throw new IllegalArgumentException("User name can't be null");
+			
 		}
 		else {
 			User user = userDao.findByUserName(name).orElseThrow(IllegalArgumentException::new);

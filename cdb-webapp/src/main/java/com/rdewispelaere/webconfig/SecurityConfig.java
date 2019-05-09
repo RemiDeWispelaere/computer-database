@@ -37,11 +37,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.authorizeRequests().antMatchers(URL_LOGIN + "**").permitAll()
+		http.authorizeRequests().antMatchers(URL_LOGIN + "**", "/Register").permitAll()
+			.antMatchers("/ListComputer**").hasAnyRole("ADMIN", "USER")
+			.antMatchers("/AddComputer**", "/DeleteComputer**", "/EditComputer**", "/RegisterAdmin").hasRole("ADMIN")
 			.and()
 			.formLogin().loginPage(URL_LOGIN).loginProcessingUrl("/loginAction").defaultSuccessUrl(URL_LIST_COMPUTER, true).permitAll()
 			.and()
 			.logout().logoutSuccessUrl(URL_LOGIN).permitAll()
+			.and()
+			.exceptionHandling().accessDeniedPage("/403")
 			.and()
 			.csrf().disable();
 	}
